@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HM</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- define main function -->
+    <string name="gym_training">GYM TRAINGING</string>
+    <string name="heart_traking">HEART TRACKER</string>
+    <string name="bmi">BMI</string>
+    <string name="health_nutrition_tip">HEALTH-NUTRITION</string>
+    <string name="profile">PROFILE</string>
+    <string name="login">LOGIN</string>
+    <string name="logout">LOGOUT</string>
+    <string name="regsiter">REGSITER</string>
+    <string name="edit_profile">EDIT PROFILE</string>
+    
+    <!-- BMI Screen -->
+    <string name="age">Age</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="result">Result</string>
+    <string name="cm">Centimet</string>
+    <string name="kilogram">Kilogram</string>
+    <string name="under_weight">Underweight</string>
+    <string name="normal">Normal</string>
+    <string name="overweight">Overweight</string>
+    <string name="obese">Obese</string>
+    <string name="morbidly_obese">Morbidly Obese</string>
+    <string name="ideal_bmi">Ideal BMI </string>
+    <string name="ideal_weight">Ideal Weight</string>
+</resources>
+	
