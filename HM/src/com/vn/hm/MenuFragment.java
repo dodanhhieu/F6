@@ -44,7 +44,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		funcLogin.setOnClickListener(this);
 		funcEditProfile = (TextView) view.findViewById(R.id.menu_editprofile_id);
 		funcEditProfile.setOnClickListener(this);
-		// nao
+		// nao chet u mai di
 	}
 
 	@Override
