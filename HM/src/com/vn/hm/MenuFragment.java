@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.d3.base.BaseFragment;
 import com.hm.heart_rate_monitor.HeartRateMonitor;
-import com.hm.heart_rate_monitor.HeartbeatView;
-import com.vn.hm.fragment.HeartTrackerFragment;
+import com.vn.hm.fragment.ExerciseCategory;
+import com.vn.hm.fragment.HeartTrackFragment;
 import com.vn.hm.fragment.RegsiterFragment;
 
 public class MenuFragment extends BaseFragment implements OnClickListener {
@@ -44,7 +44,6 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		funcLogin.setOnClickListener(this);
 		funcEditProfile = (TextView) view.findViewById(R.id.menu_editprofile_id);
 		funcEditProfile.setOnClickListener(this);
-		// nao chet u mai di
 	}
 
 	@Override
@@ -52,16 +51,17 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		int idView = v.getId();
 		switch (idView) {
 		case R.id.menu_gym_id:
-			mContentFragment = new RegsiterFragment();
+			mContentFragment = new ExerciseCategory();
 			break;
 		case R.id.menu_bmi_id:
 			mContentFragment = new HomeFragment();
 			break;
 		case R.id.menu_heart_tracker_id:
-			//mContentFragment = new HeartTrackerFragment(); 
+			mContentFragment = new HeartTrackFragment(); 
 //			Intent intentTracker = new Intent(getActivity(), HeartbeatView.class);
 //			getActivity().startActivity(intentTracker);
-			starActivity(HeartRateMonitor.class);
+//			starActivity(HeartRateMonitor.class);
+			
 			break;
 		case R.id.menu_health_nutrition_id:
 			mContentFragment = new HomeFragment();
@@ -79,6 +79,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		
 		// goto layout
 		if (mContentFragment != null) {
+			MainActivity.slideMenu.toggle();
 			switchFragment(mContentFragment);
 		}
 	}

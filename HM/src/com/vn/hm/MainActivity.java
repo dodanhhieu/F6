@@ -10,7 +10,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends BaseActivity {
 
-	SlidingMenu slideMenu;
+	public static SlidingMenu slideMenu;
 	private android.support.v4.app.Fragment mContent;
 	
 	@Override

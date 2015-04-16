@@ -5,12 +5,5 @@
     android:orientation="vertical" 
     android:background="#FFFFFF"
     >
-	<include 
-	    layout="@layout/header_layout"
-	    />
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>
