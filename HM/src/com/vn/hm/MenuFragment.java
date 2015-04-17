@@ -83,6 +83,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 			switchFragment(mContentFragment);
 		}
 	}
+	
 	public void switchFragment(Fragment fragment) {
 		if (getActivity() == null)
 			return;

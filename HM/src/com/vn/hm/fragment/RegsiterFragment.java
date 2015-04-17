@@ -25,7 +25,7 @@ public class RegsiterFragment extends BaseFragment{
 	@Override
 	public void initView(View view) {
 		registerAccount();
-		getListCategories();
+		//getListCategories();
 	}
 	
 	private void registerAccount(){
