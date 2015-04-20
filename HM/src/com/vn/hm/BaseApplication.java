@@ -42,16 +42,17 @@ public class BaseApplication extends Application{
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
+				
 				if (apiServiceCallback != null) {
 					Log.i("BASE", "StatusCode : " + client.getResponseCode());
 					if (client.getResponseCode() == 200) {
 						try {
 							JSONObject jsonObject = new JSONObject(client.getResponse());
+							Log.i(TAG, "Respone==> " + jsonObject.toString());
 							JSONObject jsonResData = jsonObject.getJSONObject("responsse_data");
 							String is_succes = GlobalFunction.getString(jsonResData, D3Utils.KEY.status);  
 							String err_msg = GlobalFunction.getString(jsonResData, D3Utils.KEY.err_msg);
 							Log.i(TAG, "is_success" + is_succes);
-							Log.i(TAG, "Res" + client.getResponse());
 							if (D3Utils.VALUE.STATUS_API_SUCCESS.equals(is_succes)) {
 								apiServiceCallback.onSucces(client.getResponse());
 							} else {
@@ -71,6 +72,7 @@ public class BaseApplication extends Application{
 			@Override
 			protected String doInBackground(String... paramStrs) {
 				client = new RestClient(D3Utils.API.BASESERVER + api);
+				Log.i(TAG, "LINK API : " + D3Utils.API.BASESERVER + api);
 				client.addHeader("Content-Type","application/json; charset=utf-8");
 				client.addHeader("Accept", "application/json; charset=utf-8");
 				Set<String> keys = params.keySet();

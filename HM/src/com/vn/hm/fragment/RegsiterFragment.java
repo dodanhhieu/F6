@@ -2,6 +2,9 @@ package com.vn.hm.fragment;
 
 import java.util.HashMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.util.Log;
 import android.view.View;
 
@@ -85,6 +88,40 @@ public class RegsiterFragment extends BaseFragment{
 			public void onSucces(String responeData) {
 				super.onSucces(responeData);
 				Log.i(TAG, " success : " + responeData.toString());
+			}
+			
+		});
+	}
+	
+	private void login(){
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("email", "");
+		
+		D3Utils.execute(getActivity(), RequestMethod.POST, D3Utils.API.API_LOGIN, params, new ApiServiceCallback(){
+			@Override
+			public void onStart() {
+				// TODO bat dau goi api
+				super.onStart();
+			}
+			
+			@Override
+			public void onError(String msgError) {
+				// TODO loi api thi vao day
+				super.onError(msgError);
+			}
+			
+			@Override
+			public void onSucces(String responeData) {
+				// TODO goi api thanh cong thi vao day
+				super.onSucces(responeData);
+				try {
+					JSONObject resJson = new JSONObject(responeData);
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 			
 		});
