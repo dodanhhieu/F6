@@ -4,14 +4,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class GlobalFunction {
 
 	public static String getString(JSONObject jsonObj, String key){
+		
 		if (jsonObj != null && jsonObj.has(key)) {
 			try {
 				String temp = jsonObj.getString(key);
 				if("null".equals(temp))
 					temp = "";
+				Log.i("XXX", " == " + temp);
 				return temp;
 			} catch (JSONException e) {
 			}

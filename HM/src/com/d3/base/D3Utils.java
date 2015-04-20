@@ -11,14 +11,16 @@ import d3.lib.base.callback.RestClient.RequestMethod;
 public class D3Utils {
 
 	public static final class API{
-		public static String BASESERVER = "native.canhovietnam.net";
+		public static String BASESERVER = "http://native.appcheap.net";
 		public static String API_REGISTER = "/users/add.json";
 		public static String API_LOGIN = "/users/login.json";
 		public static String API_LOGOUT = "/users/logout.json";
 		public static String API_UPDATE_BMI = "/users/updateBmi.json";
 		public static String API_LIST_CATEGORY = "/categories/listCat.json";
 		public static String API_LIST_ARTICLE = "/categories/listArticle.json?id=1";
-		
+		public static String API_LIST_ALL_EXERCISES = "/exercises.json";
+		public static String API_LIST_ALL_CATE_EXERCISES = "/category_excercises/listCat.json";
+//		http://native.appcheap.net/category_excercises/listCat.json
 	}
 	public static final class KEY {
 		public static final String is_success = "is_success";

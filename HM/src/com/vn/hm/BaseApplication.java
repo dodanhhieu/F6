@@ -43,12 +43,15 @@ public class BaseApplication extends Application{
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
 				if (apiServiceCallback != null) {
+					Log.i("BASE", "StatusCode : " + client.getResponseCode());
 					if (client.getResponseCode() == 200) {
 						try {
 							JSONObject jsonObject = new JSONObject(client.getResponse());
-							String is_succes = GlobalFunction.getString(jsonObject, D3Utils.KEY.status);
-							String err_msg = GlobalFunction.getString(jsonObject, D3Utils.KEY.err_msg);
-
+							JSONObject jsonResData = jsonObject.getJSONObject("responsse_data");
+							String is_succes = GlobalFunction.getString(jsonResData, D3Utils.KEY.status);  
+							String err_msg = GlobalFunction.getString(jsonResData, D3Utils.KEY.err_msg);
+							Log.i(TAG, "is_success" + is_succes);
+							Log.i(TAG, "Res" + client.getResponse());
 							if (D3Utils.VALUE.STATUS_API_SUCCESS.equals(is_succes)) {
 								apiServiceCallback.onSucces(client.getResponse());
 							} else {
