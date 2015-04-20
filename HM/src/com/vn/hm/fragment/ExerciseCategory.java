@@ -1,5 +1,6 @@
 package com.vn.hm.fragment;
 
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import com.vn.hm.utility.CategoryObject;
 import d3.lib.base.callback.RestClient.RequestMethod;
 
 public class ExerciseCategory extends BaseFragment{
+
 	private String TAG = "ExerciseCategory";
 	private List<CategoryObject> listCate;
 	@Override
@@ -35,6 +37,7 @@ public class ExerciseCategory extends BaseFragment{
 
 	@Override
 	public void initView(View view) {
+
 		// update title
 		MainActivity.updateTitleHeader(D3Utils.SCREEN.CATEGORY_WORKOUT);
 		getAllExerciseCategory();
@@ -44,6 +47,9 @@ public class ExerciseCategory extends BaseFragment{
 		HashMap<String, String> params = new HashMap<String, String>();
 		D3Utils.execute(getActivity(), RequestMethod.GET,
 				D3Utils.API.API_LIST_CATEGORY, params, new ApiServiceCallback(){
+			
+
+
 			
 
 			@Override
@@ -126,4 +132,5 @@ public class ExerciseCategory extends BaseFragment{
 		private ImageView imgThumb;
 		private TextView txtName;
 	}
+
 }
