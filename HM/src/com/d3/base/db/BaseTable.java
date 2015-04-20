@@ -13,8 +13,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 public abstract class BaseTable {
+	private String TAG = "BaseTable";
 	public static final String _ID = "_id";
 	private Context context;
 	private String urlString;// = "content://" + DBProvider.PROVIDER_NAME + "/"
@@ -56,6 +58,7 @@ public abstract class BaseTable {
 
 	private String tableName = "";
 	private Map<String, String> map = new HashMap<String, String>();
+	
 
 	public void addColumns(String columnName) {
 		if (!CommonAndroid.isBlank(columnName) && !map.containsKey(columnName)) {
@@ -64,6 +67,7 @@ public abstract class BaseTable {
 			} else {
 				map.put(columnName, " TEXT ");
 			}
+			Log.i(TAG, "addColumns "+ columnName);
 		}
 	}
 

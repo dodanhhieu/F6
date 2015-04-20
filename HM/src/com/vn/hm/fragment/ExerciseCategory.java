@@ -18,5 +18,6 @@ public class ExerciseCategory extends BaseFragment{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	
 }
