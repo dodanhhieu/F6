@@ -59,8 +59,7 @@ public class ExerciseCategory extends BaseFragment{
 
 	private void getAllExerciseCategory(){
 		HashMap<String, String> params = new HashMap<String, String>();
-		D3Utils.execute(getActivity(), RequestMethod.GET,
-				D3Utils.API.API_LIST_CATEGORY, params, new ApiServiceCallback(){
+		D3Utils.execute(getActivity(), RequestMethod.GET,D3Utils.API.API_LIST_ALL_EXERCISES, params, new ApiServiceCallback(){
 			
 			@Override
 			public void onError(String msgError) {
