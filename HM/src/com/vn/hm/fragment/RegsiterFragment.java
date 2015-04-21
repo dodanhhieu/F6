@@ -1,7 +1,17 @@
 package com.vn.hm.fragment;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +39,7 @@ public class RegsiterFragment extends BaseFragment{
 	public void initView(View view) {
 		registerAccount();
 		//getListCategories();
+		postData();
 	}
 	
 	private void registerAccount(){
@@ -93,6 +104,50 @@ public class RegsiterFragment extends BaseFragment{
 		});
 	}
 	
+public void postData() {
+		
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER + D3Utils.API.API_REGISTER);
+		Log.i(TAG, "API : " + D3Utils.API.BASESERVER + D3Utils.API.API_REGISTER);
+		try {
+		   
+		    JSONObject jsonString = new JSONObject();
+		    JSONObject jsonParams = new JSONObject();
+		     
+		    try {
+				jsonString.put("email", "d3@gmail.com");
+				jsonString.put("passwd", "xxxxxxxx");
+			    jsonString.put("weight", "68");
+			    jsonString.put("height", "1.65");
+			    jsonString.put("name", "Minh");
+			    jsonString.put("sex", "1");
+			    jsonString.put("birthday", "2010-01-01");
+			    jsonParams.put("User", jsonString);
+			    StringEntity strEntity = new StringEntity(jsonParams.toString());
+			    strEntity.setContentType("application/json;charset=UTF-8");
+			    strEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
+			    httppost.setEntity(strEntity);
+			    
+			    Log.i(TAG, "Params-send : " + EntityUtils.toString(strEntity));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		    // Execute HTTP Post Request
+		    HttpResponse response = httpclient.execute(httppost);
+		    if (response.getStatusLine().getStatusCode() == 200) {
+		    	String responseText = EntityUtils.toString(response.getEntity(),"utf-8");
+		        System.out.println("The response is" + responseText.toString());  
+ 				
+			}
+
+		} catch (ClientProtocolException e) {
+		    // TODO Auto-generated catch block
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		}}
+
 	private void login(){
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("email", "");
