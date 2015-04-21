@@ -1,5 +1,6 @@
 package com.vn.hm;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +13,9 @@ import android.util.Log;
 
 import com.d3.base.D3Utils;
 import com.d3.base.GlobalFunction;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration.Builder;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.vn.base.api.ApiServiceCallback;
 
 import d3.lib.base.callback.RestClient;
@@ -47,8 +51,8 @@ public class BaseApplication extends Application{
 					Log.i("BASE", "StatusCode : " + client.getResponseCode());
 					if (client.getResponseCode() == 200) {
 						try {
+							Log.i(TAG, "ResponeData==> " + client.getResponse().toString());
 							JSONObject jsonObject = new JSONObject(client.getResponse());
-							Log.i(TAG, "Respone==> " + jsonObject.toString());
 							JSONObject jsonResData = jsonObject.getJSONObject("responsse_data");
 							String is_succes = GlobalFunction.getString(jsonResData, D3Utils.KEY.status);  
 							String err_msg = GlobalFunction.getString(jsonResData, D3Utils.KEY.err_msg);
@@ -93,4 +97,6 @@ public class BaseApplication extends Application{
 			}
 		}.execute("");
 	}
+	
+	
 }
