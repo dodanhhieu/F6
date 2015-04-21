@@ -1,7 +1,12 @@
 package com.d3.base.db;
 
+import java.util.List;
+
+import com.vn.hm.object.CategoryObject;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 public class BpmTable extends BaseTable{
 
@@ -30,5 +35,11 @@ public class BpmTable extends BaseTable{
 			value.put(bpm, strBpm);
 			context.getContentResolver().insert(getContentUri(), value);
 		}
+	}
+	
+	public List<CategoryObject> getAllData(Context context){
+		List<CategoryObject> list = null;
+		
+		return list;
 	}
 }

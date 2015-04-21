@@ -1,18 +1,21 @@
 package com.vn.hm;
 
+import java.io.File;
+
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds.Relation;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.d3.base.BaseActivity;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.vn.hm.fragment.ExerciseCategory;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
@@ -51,7 +54,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		getSupportFragmentManager().beginTransaction().replace(R.id.menu_frame, new MenuFragment()).commit();
-
+		// init config universal
+		configUniversal();
+		
 		// init headerview
 		headerView = (View) findViewById(R.id.header_id);
 		btnMenu = (ImageView)headerView.findViewById(R.id.img_menu_header_id);
@@ -96,4 +101,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		txtTitle.setText(title);
 	}
 	
+	private void configUniversal(){
+		File fileCache = StorageUtils.getCacheDirectory(getApplicationContext());
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+											.memoryCacheExtraOptions(1024, 1024)
+											.threadPoolSize(3)
+											.memoryCacheSize(1024*1024*2)
+											.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+											.build();
+		
+	}
 }

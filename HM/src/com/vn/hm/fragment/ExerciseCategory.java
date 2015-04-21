@@ -14,14 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
 import com.vn.hm.R;
-import com.vn.hm.utility.CategoryObject;
+import com.vn.hm.object.CategoryObject;
 
 import d3.lib.base.callback.RestClient.RequestMethod;
 
@@ -29,6 +32,9 @@ public class ExerciseCategory extends BaseFragment{
 
 	private String TAG = "ExerciseCategory";
 	private List<CategoryObject> listCate;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
+	private ListView listview;
 	@Override
 	public int getlayout() {
 		// TODO Auto-generated method stub
@@ -40,7 +46,15 @@ public class ExerciseCategory extends BaseFragment{
 
 		// update title
 		MainActivity.updateTitleHeader(D3Utils.SCREEN.CATEGORY_WORKOUT);
+		imageLoader = ImageLoader.getInstance();
+		options = new DisplayImageOptions.Builder()
+				.showImageOnFail(R.drawable.ic_launcher)
+				.showStubImage(R.drawable.ic_launcher)
+				.showImageForEmptyUri(R.drawable.ic_launcher).cacheInMemory()
+				.build();
+		listview = (ListView)view.findViewById(R.id.exercise_cate_listview_id);
 		getAllExerciseCategory();
+		
 	}
 
 	private void getAllExerciseCategory(){
@@ -48,10 +62,6 @@ public class ExerciseCategory extends BaseFragment{
 		D3Utils.execute(getActivity(), RequestMethod.GET,
 				D3Utils.API.API_LIST_CATEGORY, params, new ApiServiceCallback(){
 			
-
-
-			
-
 			@Override
 			public void onError(String msgError) {
 				Log.i(TAG, "error: " + msgError.toString());
@@ -70,9 +80,11 @@ public class ExerciseCategory extends BaseFragment{
 						CategoryObject item = new CategoryObject();
 						item.setId(object.getInt("id"));
 						item.setName(object.getString("name"));
-						item.setUrlThumb(object.getString("image"));
+						item.setUrlImage(object.getString("image"));
 						listCate.add(item);
 					}
+					CateAdapter cateAdapter = new CateAdapter(getActivity(), listCate);
+					listview.setAdapter(cateAdapter);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -122,7 +134,9 @@ public class ExerciseCategory extends BaseFragment{
 			}else{
 				holder = (Holder)view.getTag();
 			}
-			
+			CategoryObject obj = (CategoryObject) getItem(position);
+			imageLoader.displayImage(obj.getUrlImage(), holder.imgThumb, options);
+			holder.txtName.setText(obj.getName());
 			return view;
 		}
 		
