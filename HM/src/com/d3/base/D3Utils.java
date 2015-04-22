@@ -19,7 +19,7 @@ public class D3Utils {
 		public static String API_LIST_CATEGORY = "/categories/listCat.json";
 		public static String API_LIST_ARTICLE = "/categories/listArticle.json?id=1";
 		public static String API_LIST_ALL_EXERCISES = "/exercises/listAll.json";
-		public static String API_LIST_ALL_CATE_EXERCISES = "/category_execises/listCat.json";
+		public static String API_LIST_ALL_CATE_EXERCISES = "/category_exercises/listCat.json";
 	}
 	public static final class KEY {
 		public static final String is_success = "is_success";
@@ -44,5 +44,14 @@ public class D3Utils {
 		((BaseApplication) context.getApplicationContext()).execute(method,
 				api, params, apiServiceCallback);
 
+	}
+	
+	public final static class ACCOUNT{
+		public static String EMAIL = "d5@gmail.com";
+		public static String PASS = "xxxxxxxx";
+	}
+	
+	public static String formatJson(String strJson){
+		return strJson.replace("null", "none");
 	}
 }

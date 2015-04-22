@@ -132,7 +132,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:orientation="horizontal"
-                    android:weightSum="6" >
+                    android:weightSum="6"
+                    android:id="@+id/menu_ll_login_id"
+                     >
 					<ImageView
                         android:layout_width="@dimen/dimen_20dp"
                         android:layout_height="@dimen/dimen_20dp"

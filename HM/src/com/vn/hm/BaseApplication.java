@@ -49,6 +49,7 @@ public class BaseApplication extends Application{
 				
 				if (apiServiceCallback != null) {
 					Log.i("BASE", "StatusCode : " + client.getResponseCode());
+					Log.i("BASE", "Data : " + client.getResponse().toString());
 					if (client.getResponseCode() == 200) {
 						try {
 							Log.i(TAG, "ResponeData==> " + client.getResponse().toString());

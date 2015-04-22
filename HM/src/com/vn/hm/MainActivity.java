@@ -3,6 +3,7 @@ package com.vn.hm;
 import java.io.File;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,6 +63,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		btnMenu = (ImageView)headerView.findViewById(R.id.img_menu_header_id);
 		btnMenu.setOnClickListener(this);
 		txtTitle = (TextView)headerView.findViewById(R.id.txt_header_title_id);
+		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		 StrictMode.setThreadPolicy(policy);
+
 	}
 	
 	public void switchContent(android.support.v4.app.Fragment fragment) {

@@ -1,6 +1,7 @@
 package com.vn.hm.fragment;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
 import com.vn.hm.R;
@@ -52,6 +54,7 @@ public class ExerciseCategory extends BaseFragment{
 				.showStubImage(R.drawable.ic_launcher)
 				.showImageForEmptyUri(R.drawable.ic_launcher).cacheInMemory()
 				.build();
+		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 		listview = (ListView)view.findViewById(R.id.exercise_cate_listview_id);
 		getAllExerciseCategory();
 		
@@ -60,7 +63,7 @@ public class ExerciseCategory extends BaseFragment{
 	private void getAllExerciseCategory(){
 		HashMap<String, String> params = new HashMap<String, String>();
 		D3Utils.execute(getActivity(), RequestMethod.GET,
-				D3Utils.API.API_LIST_CATEGORY, params, new ApiServiceCallback(){
+				D3Utils.API.API_LIST_ALL_CATE_EXERCISES, params, new ApiServiceCallback(){
 			
 			@Override
 			public void onError(String msgError) {
@@ -71,17 +74,22 @@ public class ExerciseCategory extends BaseFragment{
 			@Override
 			public void onSucces(String responeData) {
 				super.onSucces(responeData);
+				responeData = D3Utils.formatJson(responeData.toString());
+				listCate = new ArrayList<CategoryObject>();
 				try {
 					JSONObject jsonRespone = new JSONObject(responeData);
 					JSONObject jsonData = jsonRespone.getJSONObject("responsse_data");
 					JSONArray jsonArrayData = jsonData.getJSONArray("data");
 					for (int i = 0; i < jsonArrayData.length(); i++) {
 						JSONObject object = jsonArrayData.getJSONObject(i);
+						JSONObject objReal = object.getJSONObject("CategoryExercise");
+						
 						CategoryObject item = new CategoryObject();
-						item.setId(object.getInt("id"));
-						item.setName(object.getString("name"));
-						item.setUrlImage(object.getString("image"));
+						item.setId(objReal.getInt("id"));
+						item.setName(objReal.getString("name"));
+						item.setUrlImage(objReal.getString("image"));
 						listCate.add(item);
+						Log.i(TAG, "i = " + objReal.toString());
 					}
 					CateAdapter cateAdapter = new CateAdapter(getActivity(), listCate);
 					listview.setAdapter(cateAdapter);

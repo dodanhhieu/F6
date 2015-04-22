@@ -37,7 +37,7 @@ public class RegsiterFragment extends BaseFragment{
 
 	@Override
 	public void initView(View view) {
-		registerAccount();
+		//registerAccount();
 		//getListCategories();
 		postData();
 	}
@@ -115,13 +115,13 @@ public void postData() {
 		    JSONObject jsonParams = new JSONObject();
 		     
 		    try {
-				jsonString.put("email", "d3@gmail.com");
-				jsonString.put("passwd", "xxxxxxxx");
+				jsonString.put("email", D3Utils.ACCOUNT.EMAIL);
+				jsonString.put("passwd", D3Utils.ACCOUNT.PASS);
 			    jsonString.put("weight", "68");
 			    jsonString.put("height", "1.65");
 			    jsonString.put("name", "Minh");
 			    jsonString.put("sex", "1");
-			    jsonString.put("birthday", "2010-01-01");
+			    jsonString.put("born", "2010-01-01");
 			    jsonParams.put("User", jsonString);
 			    StringEntity strEntity = new StringEntity(jsonParams.toString());
 			    strEntity.setContentType("application/json;charset=UTF-8");
@@ -139,7 +139,6 @@ public void postData() {
 		    if (response.getStatusLine().getStatusCode() == 200) {
 		    	String responseText = EntityUtils.toString(response.getEntity(),"utf-8");
 		        System.out.println("The response is" + responseText.toString());  
- 				
 			}
 
 		} catch (ClientProtocolException e) {

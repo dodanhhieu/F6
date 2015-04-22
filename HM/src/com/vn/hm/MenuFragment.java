@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.d3.base.BaseFragment;
 import com.hm.heart_rate_monitor.HeartRateMonitor;
 import com.vn.hm.fragment.ExerciseCategory;
 import com.vn.hm.fragment.HeartTrackFragment;
+import com.vn.hm.fragment.LoginFragment;
 import com.vn.hm.fragment.RegsiterFragment;
 
 public class MenuFragment extends BaseFragment implements OnClickListener {
@@ -17,6 +19,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 	private TextView funcGym, funcBmi, funcTracker, funcLogin,
 			funcLogout, funcRegister,funcTips,funcEditProfile;
 	private Fragment mContentFragment;
+	private LinearLayout llLogin;
 
 	public MenuFragment() {
 
@@ -44,6 +47,8 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		funcLogin.setOnClickListener(this);
 		funcEditProfile = (TextView) view.findViewById(R.id.menu_editprofile_id);
 		funcEditProfile.setOnClickListener(this);
+		llLogin = (LinearLayout)view.findViewById(R.id.menu_ll_login_id);
+		llLogin.setOnClickListener(this);
 	}
 
 	@Override
@@ -72,7 +77,9 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		case R.id.menu_f6_id:
 			mContentFragment = new HomeFragment();
 			break;
-			
+		case R.id.menu_ll_login_id:
+			mContentFragment = new LoginFragment();
+			break;
 		default:
 			break;
 		}
