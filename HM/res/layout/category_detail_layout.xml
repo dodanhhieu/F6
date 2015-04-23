@@ -5,6 +5,12 @@
     android:orientation="vertical"
     android:background="#FFFFFF"
      >
+     <TextView 
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="All exercise of a cate"
+         android:gravity="center"
+         />
     <ListView 
         android:id="@+id/cate_detail_listview_id"
         android:layout_width="match_parent"
