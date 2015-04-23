@@ -48,7 +48,7 @@ public class BaseApplication extends Application{
 				super.onPostExecute(result);
 				
 				if (apiServiceCallback != null) {
-					Log.i("BASE", "StatusCode : " + client.getResponseCode());
+					Log.i("BASE", "ResponseCode : " + client.getResponseCode());
 					Log.i("BASE", "Data : " + result);
 					if (client.getResponseCode() == 200) {
 						try {

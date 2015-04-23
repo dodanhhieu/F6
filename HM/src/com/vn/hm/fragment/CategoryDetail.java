@@ -70,22 +70,24 @@ public class CategoryDetail extends BaseFragment {
 						super.onSucces(responeData);
 						Log.i(TAG, "Res = " + responeData);
 						try {
-							JSONObject jsonRes = new JSONObject(responeData);
+							JSONObject jsonData = new JSONObject(responeData);
+							JSONObject jsonRes = jsonData.getJSONObject("responsse_data");
 							JSONArray jsonArray = jsonRes.getJSONArray("data");
 							listData = new ArrayList<CategoryObjectDetail>();
 
-							JSONArray json = jsonArray.getJSONArray(1);
-							for (int i = 0; i < json.length(); i++) {
+//							JSONArray json = jsonArray.getJSONArray(0);
+							for (int i = 0; i < jsonArray.length(); i++) {
 								CategoryObjectDetail item = new CategoryObjectDetail();
-								JSONObject jobj = json.getJSONObject(i);
-								item.setId(jobj.getInt("id"));
-								item.setDescription(jobj
-										.getString("description"));
-								item.setContent(jobj.getString("content"));
-								// item.setImage(jobj.getString(""));
-								item.setTitle(jobj.getString("title"));
-								item.setVideo(jobj.getString("video"));
-								listData.add(item);
+								JSONObject jobjTemp = jsonArray.getJSONObject(i);
+								Log.i(TAG, "===> " + jobjTemp.toString());
+//								JSONObject jobj = jobjTemp.getJSONObject("Exercise");
+//								item.setId(Integer.valueOf(jobj.getString("id")));
+//								item.setDescription(jobj.getString("description"));
+//								item.setContent(jobj.getString("content"));
+//								// item.setImage(jobj.getString(""));
+//								item.setTitle(jobj.getString("title"));
+//								item.setVideo(jobj.getString("video"));
+//								listData.add(item);
 							}
 							CateDetailAdapter adapter = new CateDetailAdapter(getActivity(), listData);
 							listview.setAdapter(adapter);
