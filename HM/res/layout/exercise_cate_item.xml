@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_50dp"
+    android:layout_height="@dimen/dimen_60dp"
     android:background="#FFFFFF"
     >
     <ImageView 
         android:id="@+id/ex_cate_imgthumb_id"
-        android:layout_width="@dimen/dimen_40dp"
-        android:layout_height="@dimen/dimen_40dp"
+        android:layout_width="@dimen/dimen_50dp"
+        android:layout_height="@dimen/dimen_50dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
         android:layout_alignParentLeft="true"

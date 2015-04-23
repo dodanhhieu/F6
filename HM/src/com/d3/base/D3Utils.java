@@ -19,7 +19,8 @@ public class D3Utils {
 		public static String API_LIST_CATEGORY = "/categories/listCat.json";
 		public static String API_LIST_ARTICLE = "/categories/listArticle.json?id=1";
 		public static String API_LIST_ALL_EXERCISES = "/exercises/listAll.json";
-		public static String API_LIST_ALL_CATE_EXERCISES = "/category_exercises/listCat.json";
+		public static String API_LIST_ALL_CATE_EXERCISES = "/category_exercises/listCat.json";// all cattegories
+		public static String API_LIST_EXERCISE_OF_CATE = "/category_exercises/listArticle/"; // return all exercise of cate
 	}
 	public static final class KEY {
 		public static final String is_success = "is_success";

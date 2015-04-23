@@ -9,10 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,12 +61,23 @@ public class ExerciseCategory extends BaseFragment{
 		listview = (ListView)view.findViewById(R.id.exercise_cate_listview_id);
 		getAllExerciseCategory();
 		
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Log.i(TAG, "Obj : " + position + "/ id = " + listCate.get(position).getId());
+				CategoryDetail cateDetail = new CategoryDetail(listCate.get(position).getId());
+				switchFragment(cateDetail);
+			}
+		});
+		
 	}
 
 	private void getAllExerciseCategory(){
 		HashMap<String, String> params = new HashMap<String, String>();
 
-		D3Utils.execute(getActivity(), RequestMethod.GET,D3Utils.API.API_LIST_ALL_EXERCISES, params, new ApiServiceCallback(){
+		D3Utils.execute(getActivity(), RequestMethod.GET,D3Utils.API.API_LIST_ALL_CATE_EXERCISES, params, new ApiServiceCallback(){
 			
 			@Override
 			public void onError(String msgError) {
@@ -98,6 +112,17 @@ public class ExerciseCategory extends BaseFragment{
 				}
 			}
 		});
+	}
+	
+	public void switchFragment(Fragment fragment) {
+		if (getActivity() == null)
+			return;
+
+		if (getActivity() instanceof MainActivity) {
+			MainActivity fca = (MainActivity) getActivity();
+			fca.switchContent(fragment,"");
+		}
+
 	}
 	
 	public class CateAdapter extends BaseAdapter{
