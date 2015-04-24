@@ -13,7 +13,19 @@
         android:layout_marginLeft="@dimen/dimen_5dp"
         android:background="@null"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher"
+       
+         />
+    <VideoView 
+        android:id="@+id/ex_cate_video_id"
+        android:layout_width="@dimen/dimen_50dp"
+        android:layout_height="@dimen/dimen_50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_5dp"
+        android:background="@null"
+         android:visibility="invisible"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -21,7 +33,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_5dp"
         android:layout_toRightOf="@+id/ex_cate_imgthumb_id"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/dimen_30dp"
+         >
 
         <TextView
             android:id="@+id/ex_cate_title_id"
