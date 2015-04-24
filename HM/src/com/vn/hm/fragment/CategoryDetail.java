@@ -9,6 +9,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Video.Thumbnails;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +23,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.R;
 import com.vn.hm.object.CategoryObjectDetail;
@@ -31,7 +41,8 @@ public class CategoryDetail extends BaseFragment {
 	private String TAG = "CategoryDetail";
 	private ListView listview;
 	private List<CategoryObjectDetail> listData;
-
+	private DisplayImageOptions options;
+	private ImageLoader imageLoader;
 	private int idCate;
 
 	public CategoryDetail(int cateId) {
@@ -46,8 +57,16 @@ public class CategoryDetail extends BaseFragment {
 
 	@Override
 	public void initView(View view) {
+		imageLoader = ImageLoader.getInstance();
+		options = new DisplayImageOptions.Builder()
+				.showImageOnFail(R.drawable.ic_launcher)
+				.showStubImage(R.drawable.ic_launcher)
+				.showImageForEmptyUri(R.drawable.ic_launcher).cacheInMemory()
+				.build();
+		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 		getAllDataCate(idCate);
 		listview = (ListView)view.findViewById(R.id.cate_detail_listview_id);
+		
 
 	}
 
@@ -82,7 +101,7 @@ public class CategoryDetail extends BaseFragment {
 								item.setId(Integer.valueOf(jobj.getString("id")));
 								item.setDescription(jobj.getString("description"));
 								item.setContent(jobj.getString("content"));
-								// item.setImage(jobj.getString(""));
+								 item.setImage(jobj.getString("image"));
 								item.setTitle(jobj.getString("title"));
 								item.setVideo(jobj.getString("video"));
 								listData.add(item);
@@ -136,14 +155,15 @@ public class CategoryDetail extends BaseFragment {
 				holder.txtTitle = (TextView)view.findViewById(R.id.ex_cate_title_id);
 				holder.txtDes = (TextView)view.findViewById(R.id.ex_cate_des_id);
 				holder.img = (ImageView)view.findViewById(R.id.ex_cate_imgthumb_id);
+				holder.videoView = (VideoView)view.findViewById(R.id.ex_cate_video_id);
 				view.setTag(holder);
 			}else{
 				holder = (Holder)view.getTag();
 			}
 			CategoryObjectDetail obj = (CategoryObjectDetail)data.get(position);
-//			holder.txtTitle.setText(data.get(position).getTitle());
-//			holder.txtDes.setText(data.get(position).getDescription());
+			holder.txtDes.setText(data.get(position).getDescription());
 			holder.txtTitle.setText(obj.getTitle());
+			imageLoader.displayImage(obj.getImage(), holder.img, options);
 			return view;
 		}
 
@@ -153,5 +173,26 @@ public class CategoryDetail extends BaseFragment {
 		private TextView txtTitle;
 		private TextView txtDes;
 		private ImageView img;
+		private VideoView videoView;
 	}
+	
+	public class LoadThumbnail extends AsyncTask<String, Void, Bitmap>{
+		private ImageView imgView;
+		
+		public LoadThumbnail(ImageView img) {
+			this.imgView = img;
+		}
+		
+        @Override
+        protected Bitmap doInBackground(String... objectURL) {
+            //return ThumbnailUtils.createVideoThumbnail(objectURL[0], Thumbnails.MINI_KIND);
+//            return ThumbnailUtils.extractThumbnail(ThumbnailUtils.createVideoThumbnail(objectURL[0], Thumbnails.MINI_KIND), 100, 100);
+        	return ThumbnailUtils.createVideoThumbnail(objectURL[0], MediaStore.Video.Thumbnails.MICRO_KIND);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result){
+        	imgView.setImageBitmap(result);
+        }
+    }
 }
