@@ -86,6 +86,7 @@ public class CategoryDetail extends BaseFragment {
 								item.setTitle(jobj.getString("title"));
 								item.setVideo(jobj.getString("video"));
 								listData.add(item);
+
 							}
 							CateDetailAdapter adapter = new CateDetailAdapter(getActivity(), listData);
 							listview.setAdapter(adapter);
