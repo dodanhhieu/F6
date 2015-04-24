@@ -47,6 +47,7 @@ public class CategoryDetail extends BaseFragment {
 	@Override
 	public void initView(View view) {
 		getAllDataCate(idCate);
+		listview = (ListView)view.findViewById(R.id.cate_detail_listview_id);
 
 	}
 
@@ -71,16 +72,15 @@ public class CategoryDetail extends BaseFragment {
 						Log.i(TAG, "Res = " + responeData);
 						try {
 							JSONObject jsonRes = new JSONObject(responeData);
-							JSONArray jsonArray = jsonRes.getJSONArray("data");
+							JSONObject js = jsonRes.getJSONObject("responsse_data");
+							JSONArray jsonArray = js.getJSONArray("data");
 							listData = new ArrayList<CategoryObjectDetail>();
-
-							JSONArray json = jsonArray.getJSONArray(1);
-							for (int i = 0; i < json.length(); i++) {
+							for (int i = 0; i < jsonArray.length(); i++) {
 								CategoryObjectDetail item = new CategoryObjectDetail();
-								JSONObject jobj = json.getJSONObject(i);
-								item.setId(jobj.getInt("id"));
-								item.setDescription(jobj
-										.getString("description"));
+								JSONObject jobj1 = jsonArray.getJSONObject(i);
+								JSONObject jobj = jobj1.getJSONObject("Exercise");
+								item.setId(Integer.valueOf(jobj.getString("id")));
+								item.setDescription(jobj.getString("description"));
 								item.setContent(jobj.getString("content"));
 								// item.setImage(jobj.getString(""));
 								item.setTitle(jobj.getString("title"));
@@ -139,8 +139,10 @@ public class CategoryDetail extends BaseFragment {
 			}else{
 				holder = (Holder)view.getTag();
 			}
-			holder.txtTitle.setText(data.get(position).getTitle());
-			holder.txtDes.setText(data.get(position).getDescription());
+			CategoryObjectDetail obj = (CategoryObjectDetail)data.get(position);
+//			holder.txtTitle.setText(data.get(position).getTitle());
+//			holder.txtDes.setText(data.get(position).getDescription());
+			holder.txtTitle.setText(obj.getTitle());
 			return view;
 		}
 

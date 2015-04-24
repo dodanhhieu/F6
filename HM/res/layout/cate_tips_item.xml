@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_50dp"
+    android:background="#FFFFFF"
+    >
+	<TextView 
+	    android:id="@+id/cate_tips_item_txtName_id"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/app_name"
+	    android:textColor="@color/text_color"
+	    android:textSize="@dimen/dimen_15dp"
+	    android:layout_centerVertical="true"
+	    android:layout_marginLeft="@dimen/dimen_10dp"
+	    android:textStyle="bold"
+	    />    
+
+</RelativeLayout>

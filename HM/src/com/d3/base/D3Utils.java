@@ -6,6 +6,7 @@ import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.BaseApplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import d3.lib.base.callback.RestClient.RequestMethod;
 
 public class D3Utils {
@@ -18,6 +19,8 @@ public class D3Utils {
 		public static String API_UPDATE_BMI = "/users/updateBmi.json";
 		public static String API_LIST_CATEGORY = "/categories/listCat.json";
 		public static String API_LIST_ARTICLE = "/categories/listArticle.json?id=1";
+		public static String API_LIST_CATE_TIPS = "/category_tips/listCat.json"; // tips health && nutrition
+		public static String API_LIST_CATE_TIPS_DETAIL = "/category_tips/listArticle/"; // detail 1 tips
 		public static String API_LIST_ALL_EXERCISES = "/exercises/listAll.json";
 		public static String API_LIST_ALL_CATE_EXERCISES = "/category_exercises/listCat.json";// all cattegories
 		public static String API_LIST_EXERCISE_OF_CATE = "/category_exercises/listArticle/"; // return all exercise of cate
@@ -55,4 +58,7 @@ public class D3Utils {
 	public static String formatJson(String strJson){
 		return strJson.replace("null", "none");
 	}
+	
+	public static String SHARE_PREFERENCE = "com.vn.hm";
+	public static String TOKEN_KEY = "token_key";
 }

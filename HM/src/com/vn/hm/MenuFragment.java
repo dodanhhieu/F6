@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.d3.base.BaseFragment;
 import com.hm.heart_rate_monitor.HeartRateMonitor;
 import com.vn.hm.fragment.ExerciseCategory;
+import com.vn.hm.fragment.CateHealthNutritionFragment;
 import com.vn.hm.fragment.HeartTrackFragment;
 import com.vn.hm.fragment.LoginFragment;
 import com.vn.hm.fragment.RegsiterFragment;
@@ -69,7 +70,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 			
 			break;
 		case R.id.menu_health_nutrition_id:
-			mContentFragment = new HomeFragment();
+			mContentFragment = new CateHealthNutritionFragment();
 			break;
 		case R.id.menu_profile_id:
 			mContentFragment = new RegsiterFragment();

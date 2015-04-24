@@ -94,12 +94,14 @@ public class ExerciseCategory extends BaseFragment{
 					JSONObject jsonRespone = new JSONObject(responeData);
 					JSONObject jsonData = jsonRespone.getJSONObject("responsse_data");
 					JSONArray jsonArrayData = jsonData.getJSONArray("data");
+					
 					for (int i = 0; i < jsonArrayData.length(); i++) {
 						JSONObject object = jsonArrayData.getJSONObject(i);
 						JSONObject objReal = object.getJSONObject("CategoryExercise");
 						
 						CategoryObject item = new CategoryObject();
-						item.setId(objReal.getInt("id"));
+						
+						item.setId(Integer.valueOf(objReal.getInt("id")));
 						item.setName(objReal.getString("name"));
 						item.setUrlImage(objReal.getString("image"));
 						listCate.add(item);
