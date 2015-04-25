@@ -169,6 +169,7 @@ public class CategoryDetail extends BaseFragment {
 
 	}
 	
+	
 	private class Holder{
 		private TextView txtTitle;
 		private TextView txtDes;
