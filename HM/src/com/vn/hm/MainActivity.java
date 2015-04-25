@@ -1,9 +1,13 @@
 package com.vn.hm;
 
 import java.io.File;
+import java.util.GregorianCalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,6 +69,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		txtTitle = (TextView)headerView.findViewById(R.id.txt_header_title_id);
 		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		 StrictMode.setThreadPolicy(policy);
+		 
+		 settingCalendar();
 
 	}
 	
@@ -114,5 +120,20 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 											.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
 											.build();
 		
+	}
+	
+	private void settingCalendar(){
+		Intent calIntent = new Intent(Intent.ACTION_INSERT); 
+		calIntent.setType("vnd.android.cursor.item/event");    
+		calIntent.putExtra(Events.TITLE, "My House Party"); 
+		calIntent.putExtra(Events.EVENT_LOCATION, "My Beach House"); 
+		calIntent.putExtra(Events.DESCRIPTION, "A Pig Roast on the Beach"); 
+		 
+		GregorianCalendar calDate = new GregorianCalendar(2015, 4, 26);
+		calIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true); 
+		calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,calDate.getTimeInMillis()); 
+		calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,calDate.getTimeInMillis()); 
+		 
+		startActivity(calIntent);
 	}
 }
