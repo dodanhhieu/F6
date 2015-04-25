@@ -28,7 +28,6 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 
 	@Override
 	public int getlayout() {
-
 		return R.layout.menu_layout;
 	}
 
