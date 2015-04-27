@@ -17,6 +17,7 @@ public class D3Utils {
 		public static String API_LOGIN = "/users/login.json";
 		public static String API_LOGOUT = "/users/logout.json";
 		public static String API_UPDATE_BMI = "/users/updateBmi.json";
+		public static String API_EDIT_PROFILE = "/users/edit.json";
 		public static String API_LIST_CATEGORY = "/categories/listCat.json";
 		public static String API_LIST_ARTICLE = "/categories/listArticle.json?id=1";
 		public static String API_LIST_CATE_TIPS = "/category_tips/listCat.json"; // tips health && nutrition
@@ -53,6 +54,7 @@ public class D3Utils {
 	public final static class ACCOUNT{
 		public static String EMAIL = "d5@gmail.com";
 		public static String PASS = "xxxxxxxx";
+		public static String TOKEN = "964ce6fe146e1f1e624c4e60dc0e5432037ea016";
 	}
 	
 	public static String formatJson(String strJson){
