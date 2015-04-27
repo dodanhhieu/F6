@@ -41,6 +41,10 @@ public class D3Utils {
 	public final static class SCREEN{
 		public static final String CATEGORY_WORKOUT = "CATEGORY WORKOUT";
 		public static final String DETAIL_CATEGORY_WORKOUT = "DETAIL CATEGORY WORKOUT";
+		public static final String REGISTER = "REGISTER";
+		public static final String LOGIN = "LOGIN";
+		public static final String LOGOUT = "LOGOUT";
+		public static final String EDIT_PROFILE = "EDIT PROFILE";
 	}
 	
 	public static void execute(Context context, final RequestMethod method,

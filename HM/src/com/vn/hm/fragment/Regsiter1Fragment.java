@@ -25,7 +25,7 @@ import com.vn.hm.R;
 
 import d3.lib.base.callback.RestClient.RequestMethod;
 
-public class RegsiterFragment extends BaseFragment{
+public class Regsiter1Fragment extends BaseFragment{
 
 	private String TAG = "RegsiterFragment";
 	
