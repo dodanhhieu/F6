@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -19,6 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -67,6 +71,15 @@ public class CategoryDetail extends BaseFragment {
 		getAllDataCate(idCate);
 		listview = (ListView)view.findViewById(R.id.cate_detail_listview_id);
 		
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				String urlVideo = listData.get(position).getVideo();
+				playVideoExercise(urlVideo);
+			}
+		});
 
 	}
 
@@ -75,8 +88,7 @@ public class CategoryDetail extends BaseFragment {
 		HashMap<String, String> params = new HashMap<String, String>();
 		String API = D3Utils.API.API_LIST_EXERCISE_OF_CATE
 				+ String.valueOf(idCate) + ".json";
-		D3Utils.execute(getActivity(), RequestMethod.GET,
-				D3Utils.API.API_LIST_ALL_EXERCISES, params,
+		D3Utils.execute(getActivity(), RequestMethod.GET,API, params,
 				new ApiServiceCallback() {
 
 					@Override
@@ -94,19 +106,22 @@ public class CategoryDetail extends BaseFragment {
 							JSONObject js = jsonRes.getJSONObject("responsse_data");
 							JSONArray jsonArray = js.getJSONArray("data");
 							listData = new ArrayList<CategoryObjectDetail>();
-							for (int i = 0; i < jsonArray.length(); i++) {
-								CategoryObjectDetail item = new CategoryObjectDetail();
-								JSONObject jobj1 = jsonArray.getJSONObject(i);
-								JSONObject jobj = jobj1.getJSONObject("Exercise");
-								item.setId(Integer.valueOf(jobj.getString("id")));
-								item.setDescription(jobj.getString("description"));
-								item.setContent(jobj.getString("content"));
-								 item.setImage(jobj.getString("image"));
-								item.setTitle(jobj.getString("title"));
-								item.setVideo(jobj.getString("video"));
-								listData.add(item);
-
+							for (int j = 0; j < jsonArray.length(); j++) {
+								JSONArray jsojArray = jsonArray.getJSONObject(j).getJSONArray("Exercise");
+								Log.i(TAG, "=====" + jsojArray.length());
+								for (int i = 0; i < jsojArray.length(); i++) {
+									CategoryObjectDetail item = new CategoryObjectDetail();
+									JSONObject jobj = jsojArray.getJSONObject(i);
+									item.setId(Integer.valueOf(jobj.getString("id")));
+									item.setDescription(jobj.getString("description"));
+									item.setContent(jobj.getString("content"));
+									 item.setImage(jobj.getString("image"));
+									item.setTitle(jobj.getString("title"));
+									item.setVideo(jobj.getString("video"));
+									listData.add(item);
+								}
 							}
+							
 							CateDetailAdapter adapter = new CateDetailAdapter(getActivity(), listData);
 							listview.setAdapter(adapter);
 						} catch (JSONException e) {
@@ -169,6 +184,7 @@ public class CategoryDetail extends BaseFragment {
 
 	}
 	
+	
 	private class Holder{
 		private TextView txtTitle;
 		private TextView txtDes;
@@ -195,4 +211,13 @@ public class CategoryDetail extends BaseFragment {
         	imgView.setImageBitmap(result);
         }
     }
+	
+	private void playVideoExercise(String urlVideo){
+		String extension = MimeTypeMap.getFileExtensionFromUrl(urlVideo);
+		String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+		Intent mediaIntent = new Intent(Intent.ACTION_VIEW);
+		mediaIntent.setDataAndType(Uri.parse(urlVideo), mimeType);
+		getActivity().startActivity(mediaIntent);
+
+	}
 }
