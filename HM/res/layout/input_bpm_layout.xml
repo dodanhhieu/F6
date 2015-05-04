@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/msg_input_name"
+        android:textColor="@color/text_color" />
+
+    <EditText
+        android:id="@+id/input_name_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:hint="enter name"
+        android:textColor="@color/text_color"
+        android:padding="@dimen/dimen_5dp"
+        android:singleLine="true" 
+        android:layout_marginTop="@dimen/dimen_10dp"
+        />
+<Button 
+    android:id="@+id/input_btn_save_id"
+    android:layout_height="wrap_content"
+    android:layout_width="@dimen/dimen_100dp"
+    android:text="@string/save"
+    android:visibility="invisible"
+    />
+</LinearLayout>

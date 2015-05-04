@@ -23,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.d3.base.DataSharePref;
 import com.d3.base.GlobalFunction;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
@@ -110,7 +112,7 @@ public class RegisterFragment extends BaseFragment {
 		});
 
 	}
-
+	
 	private void registerAccount() {
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -119,7 +121,13 @@ public class RegisterFragment extends BaseFragment {
 		params.put("weight", etWeight.getText().toString());
 		params.put("height", etHeight.getText().toString());
 		params.put("name", etName.getText().toString());
-		params.put("sex", String.valueOf(spSex.getSelectedItem()));
+		int sexId = 0;
+		if (String.valueOf(spSex.getSelectedItem()).equalsIgnoreCase("Men")) {
+			sexId = 1;
+		}else{
+			sexId = 0;
+		}
+		params.put("sex", String.valueOf(sexId));
 		params.put("birthday", etBirthDay.getText().toString());
 		
 		HttpClient httpclient = new DefaultHttpClient();
@@ -142,12 +150,12 @@ public class RegisterFragment extends BaseFragment {
 		    
 		    try {
 		    	jsonString.put("email", etEmail.getText().toString());
-		    	jsonString.put("password", etPassword.getText().toString());
+		    	jsonString.put("passwd", etPassword.getText().toString());
 		    	jsonString.put("weight", etWeight.getText().toString());
 		    	jsonString.put("height", etHeight.getText().toString());
 		    	jsonString.put("name", etName.getText().toString());
-		    	jsonString.put("sex", String.valueOf(spSex.getSelectedItem()));
-		    	jsonString.put("born", etBirthDay.getText().toString());
+		    	jsonString.put("sex", 1);
+		    	jsonString.put("born", "2010-12-12");
 				
 			    jsonParams.put("User", jsonString);
 			    StringEntity strEntity = new StringEntity(jsonParams.toString());
@@ -167,6 +175,19 @@ public class RegisterFragment extends BaseFragment {
 		    if (response.getStatusLine().getStatusCode() == 200) {
 		    	String responseText = EntityUtils.toString(response.getEntity(),"utf-8");
 		        System.out.println("The response is" + responseText.toString());  
+		        try {
+					JSONObject jsonRes = new JSONObject(responseText.toString());
+					JSONObject jsonData = jsonRes.getJSONObject("responsse_data");
+					String token = jsonData.getString("data");
+					if (token.length() > 0) {
+						DataSharePref dataSharePref = new DataSharePref(getActivity());
+						dataSharePref.saveString(D3Utils.TOKEN_KEY, token);
+						switchFragment(new ExerciseCategory());
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		} catch (ClientProtocolException e) {
@@ -204,38 +225,14 @@ public class RegisterFragment extends BaseFragment {
 				});
 	}
 
-	// private void login() {
-	// HashMap<String, String> params = new HashMap<String, String>();
-	// params.put("email", "");
-	//
-	// D3Utils.execute(getActivity(), RequestMethod.POST,
-	// D3Utils.API.API_LOGIN, params, new ApiServiceCallback() {
-	// @Override
-	// public void onStart() {
-	// // TODO bat dau goi api
-	// super.onStart();
-	// }
-	//
-	// @Override
-	// public void onError(String msgError) {
-	// // TODO loi api thi vao day
-	// super.onError(msgError);
-	// }
-	//
-	// @Override
-	// public void onSucces(String responeData) {
-	// // TODO goi api thanh cong thi vao day
-	// super.onSucces(responeData);
-	// try {
-	// JSONObject resJson = new JSONObject(responeData);
-	//
-	// } catch (JSONException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// }
-	//
-	// });
-	// }
+	public void switchFragment(Fragment fragment) {
+		if (getActivity() == null)
+			return;
+
+		if (getActivity() instanceof MainActivity) {
+			MainActivity fca = (MainActivity) getActivity();
+			fca.switchContent(fragment,"");
+		}
+
+	}
 }

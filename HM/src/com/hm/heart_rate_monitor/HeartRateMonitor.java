@@ -3,7 +3,11 @@ package com.hm.heart_rate_monitor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -11,20 +15,17 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.vn.hm.R;
 
 
-/**
- * This class extends Activity to handle a picture preview, process the preview
- * for a red values and determine a heart beat.
- * 
- * @author Justin Wetherell <phishman3579@gmail.com>
- */
+
 public class HeartRateMonitor extends Activity {
 
     private static final String TAG = "HeartRateMonitor";
@@ -35,9 +36,9 @@ public class HeartRateMonitor extends Activity {
     private static Camera camera = null;
     private static View image = null;
     private static TextView text = null;
-
+    
     private static WakeLock wakeLock = null;
-
+    
     private static int averageIndex = 0;
     private static final int averageArraySize = 4;
     private static final int[] averageArray = new int[averageArraySize];
@@ -115,7 +116,7 @@ public class HeartRateMonitor extends Activity {
         camera = null;
     }
 
-    private static PreviewCallback previewCallback = new PreviewCallback() {
+    private  PreviewCallback previewCallback = new PreviewCallback() {
 
         /**
          * {@inheritDoc}
@@ -153,7 +154,6 @@ public class HeartRateMonitor extends Activity {
                 newType = TYPE.RED;
                 if (newType != currentType) {
                     beats++;
-                    // Log.d(TAG, "BEAT!! beats="+beats);
                 }
             } else if (imgAvg > rollingAverage) {
                 newType = TYPE.GREEN;
@@ -181,9 +181,6 @@ public class HeartRateMonitor extends Activity {
                     return;
                 }
 
-                // Log.d(TAG,
-                // "totalTimeInSecs="+totalTimeInSecs+" beats="+beats);
-
                 if (beatsIndex == beatsArraySize) beatsIndex = 0;
                 beatsArray[beatsIndex] = dpm;
                 beatsIndex++;
@@ -196,16 +193,53 @@ public class HeartRateMonitor extends Activity {
                         beatsArrayCnt++;
                     }
                 }
+                // calculate BMI index
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
+//                saveDataBPM(beatsAvg);
                 text.setText(String.valueOf(beatsAvg));
                 startTime = System.currentTimeMillis();
+                openDialogSaveData(beatsAvg);
                 beats = 0;
             }
             processing.set(false);
         }
     };
 
-    private static SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+    private  void openDialogSaveData(final int beatsAvg) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inf = LayoutInflater.from(this);
+		View view = inf.inflate(R.layout.input_bpm_layout, null);
+		builder.setView(view);
+		final EditText edtInput = (EditText)view.findViewById(R.id.input_name_id);
+		builder.setCancelable(false);
+		builder.setPositiveButton("SAVE", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				Log.i(TAG, "save name = " + edtInput.getText().toString() + " BPM = " + beatsAvg);
+				Intent intent = new Intent();
+				intent.putExtra("BPM", beatsAvg);
+				intent.putExtra("Name", edtInput.getText().toString());
+				intent.putExtra("DONE", true);
+				finish();
+			}
+		});
+		AlertDialog alert = builder.create();
+		if (!alert.isShowing()) {
+			alert.show();
+		}
+	}
+    
+    private void saveDataBPM(int bpmIndex){
+    	Intent intent = new Intent();
+		intent.putExtra("BPM", bpmIndex);
+		intent.putExtra("Name", "X");
+		intent.putExtra("DONE", true);
+//		finish();
+		finish();
+    }
+    
+    private  SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
         /**
          * {@inheritDoc}
@@ -263,4 +297,6 @@ public class HeartRateMonitor extends Activity {
 
         return result;
     }
+    
+	
 }

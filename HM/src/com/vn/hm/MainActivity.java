@@ -81,6 +81,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 	
 	
+	
+	
 	public void switchContent(android.support.v4.app.Fragment fragment,String nameFragment) {
 		mContent = fragment;
 		

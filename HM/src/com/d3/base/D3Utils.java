@@ -67,4 +67,5 @@ public class D3Utils {
 	
 	public static String SHARE_PREFERENCE = "com.vn.hm";
 	public static String TOKEN_KEY = "token_key";
+	
 }

@@ -35,5 +35,13 @@
         </activity>
         <activity android:name="com.hm.heart_rate_monitor.HeartRateMonitor"></activity>
     </application>
+	<!-- config for database -->
+	
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="gymdatabase.db" />
 
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
 </manifest>

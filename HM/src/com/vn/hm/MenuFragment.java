@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.d3.base.DataSharePref;
 import com.vn.hm.fragment.BmiFragment;
 import com.vn.hm.fragment.CateHealthNutritionFragment;
 import com.vn.hm.fragment.ExerciseCategory;
@@ -23,9 +24,10 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 	private TextView funcGym, funcBmi, funcTracker, funcLogin,
 			funcLogout, funcRegister,funcTips,funcEditProfile;
 	private Fragment mContentFragment;
-	private LinearLayout llLogin;
+	private LinearLayout llLogin,llEditProfile;
 	private int flagLogin = 0;
 	private SharedPreferences sharePref;
+	private String token;
 	public MenuFragment() {
 
 	}
@@ -60,6 +62,10 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		funcEditProfile.setOnClickListener(this);
 		llLogin = (LinearLayout)view.findViewById(R.id.menu_ll_login_id);
 		llLogin.setOnClickListener(this);
+		llEditProfile = (LinearLayout)view.findViewById(R.id.ll_menu_editprofile_id);
+		DataSharePref sharePref = new DataSharePref(getActivity());
+		token = sharePref.getString(D3Utils.TOKEN_KEY);
+		setUpStatusLogin(token);
 	}
 
 	@Override
@@ -74,22 +80,34 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 			break;
 		case R.id.menu_heart_tracker_id:
 			mContentFragment = new HeartTrackFragment(); 
-//			Intent intentTracker = new Intent(getActivity(), HeartbeatView.class);
-//			getActivity().startActivity(intentTracker);
-//			starActivity(HeartRateMonitor.class);
-			
 			break;
 		case R.id.menu_health_nutrition_id:
 			mContentFragment = new CateHealthNutritionFragment();
 			break;
 		case R.id.menu_profile_id:
-			mContentFragment = new RegisterFragment();
+//			mContentFragment = new RegisterFragment();
 			break;
 		case R.id.menu_f6_id:
 			mContentFragment = new HomeFragment();
 			break;
 		case R.id.menu_ll_login_id:
 			mContentFragment = new LoginFragment();
+			break;
+		case R.id.menu_login_id:
+			if (token == null) {
+				// goto function register
+				mContentFragment = new RegisterFragment();
+			}else{
+				String str = funcLogin.getText().toString();
+				if (str.equalsIgnoreCase(getResources().getString(R.string.login))) {
+					// goto login
+					mContentFragment = new LoginFragment();
+				}else if (str.equalsIgnoreCase(getResources().getString(R.string.logout))) {
+					// get logout
+					getLogout();
+				}
+				
+			}
 			break;
 		default:
 			break;
@@ -102,6 +120,11 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		}
 	}
 	
+	private void getLogout() {
+		// logout success then set text is login and invisible edit profile
+		
+	}
+
 	public void switchFragment(Fragment fragment) {
 		if (getActivity() == null)
 			return;
@@ -116,5 +139,18 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 	public void starActivity(Class<?> newClass){
 		Intent intent = new Intent(getActivity(), newClass);
 		getActivity().startActivity(intent);
+	}
+	
+	private void setUpStatusLogin(String token){
+		if (token == null) {
+			// open register
+			funcLogin.setText(getActivity().getResources().getString(R.string.regsiter));
+			llEditProfile.setVisibility(View.INVISIBLE);
+		}else{
+			// open login
+			funcLogin.setText(getActivity().getResources().getString(R.string.logout));
+			llEditProfile.setVisibility(View.VISIBLE);
+		}
+		
 	}
 }
