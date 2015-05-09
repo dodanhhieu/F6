@@ -1,5 +1,7 @@
 package com.vn.hm.fragment;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,8 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.activeandroid.query.Select;
 import com.d3.base.BaseFragment;
 import com.d3.base.db.BpmTable;
+import com.d3.base.db.Heart;
 import com.hm.heart_rate_monitor.HeartRateMonitor;
 import com.vn.hm.R;
 
@@ -34,7 +38,8 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 	public void initView(View view) {
 		btnStart = (RelativeLayout)view.findViewById(R.id.rl_start_id);
 		btnStart.setOnClickListener(this);
-		new BpmTable(getActivity());
+//		new BpmTable(getActivity());
+		getAllHistory();
 	}
 
 	@Override
@@ -56,17 +61,27 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 	public void onResume() {
 		super.onResume();
 		Log.i(TAG, "====> resume");
+		
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		Log.i(TAG, "onActivityResult");
 		if (requestCode == 1) {
 			Log.i(TAG , "data BPM = " + data.getIntExtra("BPM", 0));
 			Log.i(TAG , "data Name = " + data.getIntExtra("Name", 0));
+			Log.i(TAG , "data Date = " + data.getIntExtra("Date",0));
+			
 			int bmpIndex = data.getIntExtra("BPM", 0);
-			showDialogSaveData(bmpIndex);
+			String name = String.valueOf(data.getIntExtra("Name", 0));
+			int bpmIndex = data.getIntExtra("BPM", 0);
+			String date = String.valueOf(data.getIntExtra("Date",0));
+			
+			Heart h = new Heart(name, bpmIndex, date);
+			h.save();
+			//showDialogSaveData(bmpIndex);
 		}
 	}
 	
@@ -90,4 +105,11 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 		d.show();
 	}
 	
+	private void getAllHistory(){
+		Select select = new Select();
+		ArrayList<Heart> list = select.all().from(Heart.class).execute();
+		for (int i = 0; i < list.size(); i++) {
+			Log.i(TAG, "Value = " + list.get(i).date + " ; " + list.get(i).name + " ; " + list.get(i).indexHeart);
+		}
+	}
 }

@@ -1,5 +1,7 @@
 package com.hm.heart_rate_monitor;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.d3.base.db.Heart;
 import com.vn.hm.R;
 
 
@@ -206,6 +209,8 @@ public class HeartRateMonitor extends Activity {
     };
 
     private  void openDialogSaveData(final int beatsAvg) {
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    	final String currentDate = dateFormat.format(new Date());
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inf = LayoutInflater.from(this);
 		View view = inf.inflate(R.layout.input_bpm_layout, null);
@@ -216,17 +221,30 @@ public class HeartRateMonitor extends Activity {
 			
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				Log.i(TAG, "save name = " + edtInput.getText().toString() + " BPM = " + beatsAvg);
+				//Log.i(TAG, "save name = " + edtInput.getText().toString() + " BPM = " + beatsAvg);
+				
 				Intent intent = new Intent();
 				intent.putExtra("BPM", beatsAvg);
 				intent.putExtra("Name", edtInput.getText().toString());
+				intent.putExtra("Date", currentDate);
+				Log.i(TAG, "==>CurrentDate = " + currentDate);
 				intent.putExtra("DONE", true);
+				setResult(RESULT_OK, intent);
+				Heart h = new Heart();
+				h.name = edtInput.getText().toString();
+				h.indexHeart = beatsAvg;
+				h.date = currentDate;
+				h.save();
+				
 				finish();
 			}
 		});
+		
 		AlertDialog alert = builder.create();
 		if (!alert.isShowing()) {
 			alert.show();
+		}else{
+			alert = null;
 		}
 	}
     

@@ -11,6 +11,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.activeandroid.ActiveAndroid;
 import com.d3.base.D3Utils;
 import com.d3.base.GlobalFunction;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -24,7 +25,13 @@ import d3.lib.base.callback.RestClient.RequestMethod;
 public class BaseApplication extends Application{
 
 	private String TAG = "BaseApplication";
-	
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		ActiveAndroid.initialize(this);
+	}
 	public void execute(final RequestMethod method, final String api,
 			final Map<String, String> params,
 			final ApiServiceCallback apiServiceCallback) {
