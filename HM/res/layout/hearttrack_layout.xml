@@ -37,41 +37,12 @@
         android:layout_weight="3"
         android:gravity="center_vertical"
         android:textColor="@color/green_dam"
+        android:textStyle="bold"
+        android:textSize="@dimen/dimen_18dp"
         />
 </LinearLayout>
 
-<LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_40dp"
-    android:orientation="horizontal"
-    android:weightSum="4"
-    >
-    <TextView 
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:text="@string/birdth"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:textColor="@color/green_dam"
-        android:paddingLeft="@dimen/dimen_5dp"
-        />
-    <TextView 
-        android:layout_width="@dimen/dimen_10dp"
-        android:layout_height="wrap_content"
-        android:text="@string/double_dot"
-        android:textSize="@dimen/dimen_20dp"
-        android:textColor="@color/green_dam"
-        />
-    <TextView 
-        android:id="@+id/heart_birthday_id"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:text="@string/app_name"
-        android:layout_weight="3"
-        android:gravity="center_vertical"
-        android:textColor="@color/green_dam"
-        />
-</LinearLayout>
+
 <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_40dp"
@@ -104,32 +75,44 @@
         android:textColor="@color/green_dam"
         />
 </LinearLayout>
-<RelativeLayout 
+<LinearLayout 
     android:id="@+id/rl_start_id"
-    android:layout_width="@dimen/dimen_200dp"
-    android:layout_height="@dimen/dimen_200dp"
-    android:background="@drawable/bgr_circle"
-    android:layout_gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_50dp"
+    android:background="#CFCFCF"
+    android:orientation="horizontal"
+    android:weightSum="2"
+    android:gravity="center"
     >
-    <ImageView 
-        android:id="@+id/img_heart_id"
-        android:layout_width="@dimen/dimen_50dp"
-        android:layout_height="@dimen/dimen_50dp"
-        android:background="@null"
-        android:src="@drawable/icon_heart"
-        android:layout_marginTop="@dimen/dimen_20dp"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/app_name"
-        android:visibility="invisible"
+    
+    <TextView 
+        android:id="@+id/txt_history_id"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:singleLine="true"
+        android:textColor="@color/green_dam"
+        android:text="@string/history"
+        android:textSize="@dimen/dimen_20dp"
+        android:gravity="center"
         />
     <TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/txt_taptostart_id"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:singleLine="true"
         android:textColor="#FFFFFF"
         android:text="@string/tap_to_start"
-        android:layout_centerInParent="true"
         android:textSize="@dimen/dimen_20dp"
+        android:gravity="center"
         />
-</RelativeLayout>
+</LinearLayout>
+
+<ListView 
+    android:id="@+id/history_heart_lv_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:dividerHeight="@dimen/dimen_2dp"
+    ></ListView>
 </LinearLayout>

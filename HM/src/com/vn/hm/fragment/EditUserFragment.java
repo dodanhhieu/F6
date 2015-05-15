@@ -2,6 +2,7 @@ package com.vn.hm.fragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
@@ -36,6 +37,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
@@ -48,7 +50,7 @@ import com.vn.hm.R;
 
 import d3.lib.base.callback.RestClient.RequestMethod;
 
-public class RegisterFragment extends BaseFragment {
+public class EditUserFragment extends BaseFragment {
 
 	private String TAG = "RegsiterFragment";
 	private EditText etEmail, etPassword, etWeight, etHeight, etName;
@@ -66,15 +68,18 @@ public class RegisterFragment extends BaseFragment {
 
 	@Override
 	public void initView(View view) {
-		MainActivity.updateTitleHeader(D3Utils.SCREEN.REGISTER);
+		MainActivity.updateTitleHeader(D3Utils.SCREEN.EDIT_PROFILE);
 		etEmail = (EditText) view.findViewById(R.id.etEmail);
+		etEmail.setEnabled(false);
 		etPassword = (EditText) view.findViewById(R.id.etPass);
 		etWeight = (EditText) view.findViewById(R.id.etWeight);
 		etHeight = (EditText) view.findViewById(R.id.etHeight);
 		etName = (EditText) view.findViewById(R.id.etName);
 		
 		spSex = (Spinner) view.findViewById(R.id.spSex);
+		updateData();
 		btnRegister = (Button) view.findViewById(R.id.btnRegister);
+		btnRegister.setText("Update");
 		arrSex.add("Men");
 		arrSex.add("Women");
 		ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getActivity(),
@@ -114,6 +119,19 @@ public class RegisterFragment extends BaseFragment {
 
 	}
 	
+	private void updateData(){
+		Select select = new Select();
+		ArrayList<UserAccount> listAccount = select.all().from(UserAccount.class).execute();
+		if (listAccount.size() > 0) {
+			Collections.reverse(listAccount);
+			UserAccount user = listAccount.get(0);
+			etEmail.setText(user.email);
+			etName.setText(user.name);
+			etHeight.setText(String.valueOf(user.height));
+			etWeight.setText(String.valueOf(user.weight));
+			etPassword.setText(user.password);
+		}
+	}
 	private void registerAccount() {
 
 //		HashMap<String, String> params = new HashMap<String, String>();

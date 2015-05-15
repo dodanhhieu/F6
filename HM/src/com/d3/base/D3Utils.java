@@ -45,6 +45,11 @@ public class D3Utils {
 		public static final String LOGIN = "LOGIN";
 		public static final String LOGOUT = "LOGOUT";
 		public static final String EDIT_PROFILE = "EDIT PROFILE";
+		public static final String CALENDAR = "CALENDAR";
+		public static final String BMI = "BMI";
+		public static final String BMI_HISTORY = "BMI HISTORY";
+		public static final String HEALTH_NUTRITION = "HEALTH-NUTRITION";
+		public static final String HEART_TRACK = "HEART TRACK";
 	}
 	
 	public static void execute(Context context, final RequestMethod method,
@@ -67,5 +72,6 @@ public class D3Utils {
 	
 	public static String SHARE_PREFERENCE = "com.vn.hm";
 	public static String TOKEN_KEY = "token_key";
-	
+	public static String LOGIN_KEY = "login_key";
+	public static String LOGOUT_KEY = "logout_key";
 }

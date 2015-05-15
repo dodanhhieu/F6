@@ -15,10 +15,10 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Video.Thumbnails;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -35,7 +35,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vn.base.api.ApiServiceCallback;
+import com.vn.hm.MainActivity;
 import com.vn.hm.R;
+import com.vn.hm.calendar.CalendarUtility;
 import com.vn.hm.object.CategoryObjectDetail;
 
 import d3.lib.base.callback.RestClient.RequestMethod;
@@ -68,6 +70,7 @@ public class CategoryDetail extends BaseFragment {
 				.showImageForEmptyUri(R.drawable.ic_launcher).cacheInMemory()
 				.build();
 		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+		MainActivity.updateTitleHeader(D3Utils.SCREEN.DETAIL_CATEGORY_WORKOUT);
 		getAllDataCate(idCate);
 		listview = (ListView)view.findViewById(R.id.cate_detail_listview_id);
 		
@@ -77,6 +80,7 @@ public class CategoryDetail extends BaseFragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				String urlVideo = listData.get(position).getVideo();
+				Log.i(TAG, "videoUrl " + urlVideo);
 				playVideoExercise(urlVideo);
 			}
 		});
@@ -160,7 +164,7 @@ public class CategoryDetail extends BaseFragment {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = convertView;
 			Holder holder;
 			if (view == null) {
@@ -171,6 +175,7 @@ public class CategoryDetail extends BaseFragment {
 				holder.txtDes = (TextView)view.findViewById(R.id.ex_cate_des_id);
 				holder.img = (ImageView)view.findViewById(R.id.ex_cate_imgthumb_id);
 				holder.videoView = (VideoView)view.findViewById(R.id.ex_cate_video_id);
+				holder.txtAddWorkout = (TextView)view.findViewById(R.id.ex_cate_add_id);
 				view.setTag(holder);
 			}else{
 				holder = (Holder)view.getTag();
@@ -179,17 +184,31 @@ public class CategoryDetail extends BaseFragment {
 			holder.txtDes.setText(data.get(position).getDescription());
 			holder.txtTitle.setText(obj.getTitle());
 			imageLoader.displayImage(obj.getImage(), holder.img, options);
+			holder.txtAddWorkout.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					Log.i(TAG, "Add to workout");
+					String title = data.get(position).getTitle();
+					String strDes = data.get(position).getDescription();
+					CalendarUtility.addEvent(getActivity(), title,
+						    strDes, System.currentTimeMillis() + 15000,
+						    System.currentTimeMillis() + 30000);
+					
+				}
+			});
+			
 			return view;
 		}
 
 	}
-	
 	
 	private class Holder{
 		private TextView txtTitle;
 		private TextView txtDes;
 		private ImageView img;
 		private VideoView videoView;
+		private TextView txtAddWorkout;
 	}
 	
 	public class LoadThumbnail extends AsyncTask<String, Void, Bitmap>{

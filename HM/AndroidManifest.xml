@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name="com.vn.hm.BaseApplication"
@@ -34,6 +35,7 @@
         </activity>
         <activity android:name="com.hm.heart_rate_monitor.HeartRateMonitor" >
         </activity>
+        <receiver android:name="com.vn.hm.calendar.AlarmRecerver" />
     </application>
     <!-- config for database -->
 
@@ -45,6 +47,15 @@
         android:value="1" />
     <meta-data
         android:name="AA_MODELS"
-        android:value="com.d3.base.db.Heart" />
+        android:value="com.d3.base.db.Heart " 
+        />
+     <meta-data
+        android:name="AA_MODELS"
+        android:value="com.d3.base.db.UserAccount " 
+        />
+     <meta-data
+        android:name="AA_MODELS"
+        android:value="com.d3.base.db.BmiTable" 
+        />
 
 </manifest>

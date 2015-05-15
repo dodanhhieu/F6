@@ -32,7 +32,11 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="3"
-                android:background="@drawable/border_edittext" />
+                android:background="@drawable/border_edittext" 
+                android:paddingLeft="@dimen/dimen_5dp"
+                android:textColor="@color/green_dam"
+                android:textCursorDrawable="@drawable/line_vertical"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +61,11 @@
                 android:layout_height="40dp"
                 android:layout_weight="3"
                 android:background="@drawable/border_edittext"
-                android:ems="10" >
+                android:ems="10" 
+                android:paddingLeft="@dimen/dimen_5dp"
+                android:textColor="@color/green_dam"
+                android:textCursorDrawable="@drawable/line_vertical"
+                >
 
                 <requestFocus />
             </EditText>

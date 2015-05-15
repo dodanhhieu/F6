@@ -227,7 +227,6 @@ public class HeartRateMonitor extends Activity {
 				intent.putExtra("BPM", beatsAvg);
 				intent.putExtra("Name", edtInput.getText().toString());
 				intent.putExtra("Date", currentDate);
-				Log.i(TAG, "==>CurrentDate = " + currentDate);
 				intent.putExtra("DONE", true);
 				setResult(RESULT_OK, intent);
 				Heart h = new Heart();

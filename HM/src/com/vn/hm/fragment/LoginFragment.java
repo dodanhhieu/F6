@@ -1,9 +1,30 @@
 package com.vn.hm.fragment;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.media.audiofx.Visualizer.MeasurementPeakRms;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -11,7 +32,10 @@ import android.widget.EditText;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.d3.base.DataSharePref;
 import com.vn.base.api.ApiServiceCallback;
+import com.vn.hm.MainActivity;
+import com.vn.hm.MenuFragment;
 import com.vn.hm.R;
 
 import d3.lib.base.callback.RestClient.RequestMethod;
@@ -19,6 +43,7 @@ import d3.lib.base.callback.RestClient.RequestMethod;
 public class LoginFragment extends BaseFragment {
 	private EditText etEmail, etPassword;
 	private Button btnLogin;
+	private String TAG = "LoginFragment";
 
 	@Override
 	public int getlayout() {
@@ -28,6 +53,7 @@ public class LoginFragment extends BaseFragment {
 
 	@Override
 	public void initView(View view) {
+		MainActivity.updateTitleHeader(D3Utils.SCREEN.LOGIN);
 		etEmail = (EditText) view.findViewById(R.id.etEmail);
 		etPassword = (EditText) view.findViewById(R.id.etPass);
 		btnLogin = (Button) view.findViewById(R.id.btnLogin);
@@ -41,29 +67,83 @@ public class LoginFragment extends BaseFragment {
 	}
 
 	private void login() {
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("email", etEmail.getText().toString());
-		params.put("password", etPassword.getText().toString());
-		D3Utils.execute(getActivity(), RequestMethod.POST,
-				D3Utils.API.API_LOGIN, params, new ApiServiceCallback() {
-					@Override
-					public void onStart() {
-						super.onStart();
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER + D3Utils.API.API_LOGIN);
+		Log.i(TAG, "API : " + D3Utils.API.BASESERVER + D3Utils.API.API_LOGIN);
+		try {
+		   
+		    JSONObject jsonString = new JSONObject();
+		    JSONObject jsonParams = new JSONObject();
+		 // Create a local instance of cookie store
+		    CookieStore cookieStore = new BasicCookieStore();
 
+		    // Create local HTTP context
+		    HttpContext localContext = new BasicHttpContext();
+		    // Bind custom cookie store to the local context
+		    Cookie cookie = new BasicClientCookie("name", "value-longsex");
+		    cookieStore.addCookie(cookie);
+		    localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+		    
+		    
+		    try {
+		    	jsonString.put("email", etEmail.getText().toString());
+		    	jsonString.put("passwd", etPassword.getText().toString());
+		    	
+			    jsonParams.put("User", jsonString);
+			    StringEntity strEntity = new StringEntity(jsonParams.toString());
+			    strEntity.setContentType("application/json;charset=UTF-8");
+			    strEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
+			    httppost.setEntity(strEntity);
+			    //Log.i(TAG, "Login 1- cucki" + cookieStore);
+			    Log.i(TAG  , "Params-send : " + EntityUtils.toString(strEntity));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		    // Execute HTTP Post Request
+		    HttpResponse response = httpclient.execute(httppost,localContext);
+		    Log.i(TAG, "Login 2 : " + response.getStatusLine().getStatusCode());
+		    if (response.getStatusLine().getStatusCode() == 200) {
+		    	String responseText = EntityUtils.toString(response.getEntity(),"utf-8");
+		        System.out.println("The response is" + responseText.toString());  
+		        try {
+					JSONObject jsonRes = new JSONObject(responseText.toString());
+					JSONObject jsonData = jsonRes.getJSONObject("responsse_data");
+					token = jsonData.getString("data");
+					if (token.length() > 0) {
+						DataSharePref dataSharePref = new DataSharePref(getActivity());
+						dataSharePref.saveString(D3Utils.TOKEN_KEY, token);
+						//MenuFragment menu = new MenuFragment();
+						dataSharePref.saveInt(D3Utils.LOGIN_KEY, 1);
+						//menu.updateUI(token, getActivity());
+						//menu.setUpStatusLogin(token, getActivity());
+						switchFragment(new ExerciseCategory());
+						
 					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
-					@Override
-					public void onError(String msgError) {
-						super.onError(msgError);
-					}
+		} catch (ClientProtocolException e) {
+		    // TODO Auto-generated catch block
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		}
+	}
+	String token;
+	public void switchFragment(Fragment fragment) {
+		if (getActivity() == null)
+			return;
 
-					@Override
-					public void onSucces(JSONObject responeJson) {
-						super.onSucces(responeJson);
-
-					}
-
-				});
-
+		if (getActivity() instanceof MainActivity) {
+			MainActivity fca = (MainActivity) getActivity();
+			fca.switchContent(fragment,"");
+			//MenuFragment menu = new MenuFragment();
+			//menu.setUpStatusLogin(token,getActivity());
+		}
+		
 	}
 }

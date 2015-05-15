@@ -148,10 +148,10 @@ public class CalendarView extends Activity {
 			for (int i = 0; i < 7; i++) {
 				itemvalue = df.format(itemmonth.getTime());
 				itemmonth.add(GregorianCalendar.DATE, 1);
-				items.add("2015-04-26");
-				items.add("2015-04-27");
-				items.add("2015-04-28");
-				items.add("2015-10-20");
+				items.add("2015-05-26");
+				items.add("2015-05-27");
+				items.add("2015-05-28");
+				items.add("2015-05-20");
 				items.add("2015-11-30");
 				items.add("2015-11-28");
 			}
