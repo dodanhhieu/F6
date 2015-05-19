@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFFFF" >
+    android:layout_height="wrap_content" >
 
     <ImageView
         android:id="@+id/ex_cate_imgthumb_id"
-        android:layout_width="@dimen/dimen_50dp"
-        android:layout_height="@dimen/dimen_50dp"
+        android:layout_width="@dimen/dimen_60dp"
+        android:layout_height="@dimen/dimen_60dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_5dp"
-        android:background="@null"
+        android:cropToPadding="true"
+        android:padding="1dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher"
-       
-         />
-    <VideoView 
+        android:src="@drawable/ic_launcher" />
+
+    <VideoView
         android:id="@+id/ex_cate_video_id"
         android:layout_width="@dimen/dimen_50dp"
         android:layout_height="@dimen/dimen_50dp"
@@ -24,8 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_5dp"
         android:background="@null"
-         android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
     <LinearLayout
         android:id="@+id/ll_content_id"
@@ -33,43 +31,40 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_5dp"
-        android:layout_toRightOf="@+id/ex_cate_imgthumb_id"
-        android:orientation="vertical"
         android:layout_marginRight="@dimen/dimen_30dp"
-         >
+        android:layout_toRightOf="@+id/ex_cate_imgthumb_id"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/ex_cate_title_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/text_color"
             android:textSize="@dimen/dimen_14dp"
-            android:textStyle="bold" 
-            android:singleLine="true"
-            />
-        
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/ex_cate_des_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="3"
             android:text="@string/app_name"
             android:textColor="@color/text_color"
             android:textSize="@dimen/dimen_13dp"
-            android:maxLines="3"
             android:textStyle="normal" />
+
         <TextView
             android:id="@+id/ex_cate_add_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="right"
+            android:maxLines="1"
             android:text="Add to workout"
             android:textColor="@color/green_dam"
             android:textSize="@dimen/dimen_17dp"
-            android:maxLines="1"
-            android:textStyle="normal" 
-            android:gravity="right"
-            />
-        
+            android:textStyle="normal" />
     </LinearLayout>
 
     <ImageView
@@ -80,6 +75,5 @@
         android:layout_marginRight="@dimen/dimen_5dp"
         android:background="@null"
         android:src="@drawable/icon_next" />
-    
 
 </RelativeLayout>

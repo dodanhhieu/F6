@@ -33,6 +33,7 @@ import android.widget.EditText;
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
+import com.d3.base.GlobalFunction;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
 import com.vn.hm.MenuFragment;
@@ -68,82 +69,108 @@ public class LoginFragment extends BaseFragment {
 
 	private void login() {
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER + D3Utils.API.API_LOGIN);
+		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER
+				+ D3Utils.API.API_LOGIN);
 		Log.i(TAG, "API : " + D3Utils.API.BASESERVER + D3Utils.API.API_LOGIN);
 		try {
-		   
-		    JSONObject jsonString = new JSONObject();
-		    JSONObject jsonParams = new JSONObject();
-		 // Create a local instance of cookie store
-		    CookieStore cookieStore = new BasicCookieStore();
 
-		    // Create local HTTP context
-		    HttpContext localContext = new BasicHttpContext();
-		    // Bind custom cookie store to the local context
-		    Cookie cookie = new BasicClientCookie("name", "value-longsex");
-		    cookieStore.addCookie(cookie);
-		    localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-		    
-		    
-		    try {
-		    	jsonString.put("email", etEmail.getText().toString());
-		    	jsonString.put("passwd", etPassword.getText().toString());
-		    	
-			    jsonParams.put("User", jsonString);
-			    StringEntity strEntity = new StringEntity(jsonParams.toString());
-			    strEntity.setContentType("application/json;charset=UTF-8");
-			    strEntity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
-			    httppost.setEntity(strEntity);
-			    //Log.i(TAG, "Login 1- cucki" + cookieStore);
-			    Log.i(TAG  , "Params-send : " + EntityUtils.toString(strEntity));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			JSONObject jsonString = new JSONObject();
+			JSONObject jsonParams = new JSONObject();
+			// Create a local instance of cookie store
+			CookieStore cookieStore = new BasicCookieStore();
 
-		    // Execute HTTP Post Request
-		    HttpResponse response = httpclient.execute(httppost,localContext);
-		    Log.i(TAG, "Login 2 : " + response.getStatusLine().getStatusCode());
-		    if (response.getStatusLine().getStatusCode() == 200) {
-		    	String responseText = EntityUtils.toString(response.getEntity(),"utf-8");
-		        System.out.println("The response is" + responseText.toString());  
-		        try {
-					JSONObject jsonRes = new JSONObject(responseText.toString());
-					JSONObject jsonData = jsonRes.getJSONObject("responsse_data");
-					token = jsonData.getString("data");
-					if (token.length() > 0) {
-						DataSharePref dataSharePref = new DataSharePref(getActivity());
-						dataSharePref.saveString(D3Utils.TOKEN_KEY, token);
-						//MenuFragment menu = new MenuFragment();
-						dataSharePref.saveInt(D3Utils.LOGIN_KEY, 1);
-						//menu.updateUI(token, getActivity());
-						//menu.setUpStatusLogin(token, getActivity());
-						switchFragment(new ExerciseCategory());
-						
-					}
+			// Create local HTTP context
+			HttpContext localContext = new BasicHttpContext();
+			// Bind custom cookie store to the local context
+			Cookie cookie = new BasicClientCookie("name", "value-longsex");
+			cookieStore.addCookie(cookie);
+			localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+
+			String strEmail = etEmail.getText().toString();
+			if (GlobalFunction.isEmail(strEmail)) {
+				try {
+					jsonString.put("email", strEmail);
+					jsonString.put("passwd", etPassword.getText().toString());
+
+					jsonParams.put("User", jsonString);
+					StringEntity strEntity = new StringEntity(
+							jsonParams.toString());
+					strEntity.setContentType("application/json;charset=UTF-8");
+					strEntity
+							.setContentEncoding(new BasicHeader(
+									HTTP.CONTENT_TYPE,
+									"application/json;charset=UTF-8"));
+					httppost.setEntity(strEntity);
+					// Log.i(TAG, "Login 1- cucki" + cookieStore);
+					Log.i(TAG,
+							"Params-send : " + EntityUtils.toString(strEntity));
+
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				// Execute HTTP Post Request
+				HttpResponse response = httpclient.execute(httppost,
+						localContext);
+				Log.i(TAG, "Login 2 : "
+						+ response.getStatusLine().getStatusCode());
+				if (response.getStatusLine().getStatusCode() == 200) {
+					String responseText = EntityUtils.toString(
+							response.getEntity(), "utf-8");
+					System.out.println("The response is"
+							+ responseText.toString());
+					try {
+						JSONObject jsonRes = new JSONObject(
+								responseText.toString());
+						JSONObject jsonData = jsonRes
+								.getJSONObject("responsse_data");
+						token = jsonData.getString("data");
+						String status = jsonData.getString("status");
+						if (status.equalsIgnoreCase("0")) {
+							GlobalFunction.showDialog(getActivity(),
+									"Login fail", "OK", null, null, null);
+						} else {
+							DataSharePref dataSharePref = new DataSharePref(
+									getActivity());
+							dataSharePref.saveString(D3Utils.TOKEN_KEY, token);
+							// MenuFragment menu = new MenuFragment();
+							dataSharePref.saveInt(D3Utils.LOGIN_KEY, 1);
+							// menu.updateUI(token, getActivity());
+							// menu.setUpStatusLogin(token, getActivity());
+							switchFragment(new ExerciseCategory());
+						}
+
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} else {
+				GlobalFunction.showDialog(getActivity(), "Email format error",
+						"OK", null, null, null);
 			}
 
 		} catch (ClientProtocolException e) {
-		    // TODO Auto-generated catch block
+			// TODO Auto-generated catch block
 		} catch (IOException e) {
-		    // TODO Auto-generated catch block
+			// TODO Auto-generated catch block
 		}
+
 	}
+
 	String token;
+
 	public void switchFragment(Fragment fragment) {
 		if (getActivity() == null)
 			return;
 
 		if (getActivity() instanceof MainActivity) {
 			MainActivity fca = (MainActivity) getActivity();
-			fca.switchContent(fragment,"");
-			//MenuFragment menu = new MenuFragment();
-			//menu.setUpStatusLogin(token,getActivity());
+			fca.switchContent(fragment, "");
+			// MenuFragment menu = new MenuFragment();
+			// menu.setUpStatusLogin(token,getActivity());
 		}
-		
+
 	}
 }

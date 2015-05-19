@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
+import com.d3.base.GlobalFunction;
 import com.vn.hm.calendar.CalendarFragment;
 import com.vn.hm.fragment.BmiFragment;
 import com.vn.hm.fragment.CateHealthNutritionFragment;
@@ -80,8 +81,10 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		token = sharePref.getString(D3Utils.TOKEN_KEY);
 		setUpStatusLogin(token,getActivity());
 		Log.i(TAG , "init View");
+		
 	}
 	boolean flagSwithView = false;
+	boolean flagCheckUser = false;
 	@Override
 	public void onClick(View v) {
 		int idView = v.getId();
@@ -89,18 +92,22 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		case R.id.menu_gym_id:
 			mContentFragment = new ExerciseCategory();
 			flagSwithView = true;
+			flagCheckUser = false;
 			break;
 		case R.id.menu_bmi_id:
 			mContentFragment = new BmiFragment();
+			flagCheckUser = false;
 			flagSwithView = true;
 			break;
 		case R.id.menu_heart_tracker_id:
-			mContentFragment = new HeartTrackFragment(); 
+			mContentFragment = new HeartTrackFragment();
+			flagCheckUser = true;
 			flagSwithView = true;
 			break;
 		case R.id.menu_health_nutrition_id:
 			mContentFragment = new CateHealthNutritionFragment();
 			flagSwithView = true;
+			flagCheckUser = false;
 			break;
 		case R.id.menu_editprofile_id:
 			flagSwithView = true;
@@ -113,6 +120,7 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 			
 			flagSwithView = true;
 		    mContentFragment = new CalendarFragment();
+		    flagCheckUser = true;
 		    break;
 		case R.id.menu_f6_id:
 			mContentFragment = new HomeFragment();
@@ -129,9 +137,13 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 			break;
 		case R.id.menu_login_id:
 			flagSwithView = true;
+			flagCheckUser = false;
 			if (token == null) {
 				// goto function register
 				mContentFragment = new RegisterFragment();
+				//MainActivity.slideMenu.toggle();
+				//switchFragment(mContentFragment);
+				break;
 			}else{
 //				String str = funcLogin.getText().toString();
 				DataSharePref dataSharePref = new DataSharePref(getActivity());
@@ -140,6 +152,8 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 					// goto login
 					mContentFragment = new LoginFragment();
 					llLogin.setVisibility(View.INVISIBLE);
+					MainActivity.slideMenu.toggle();
+					switchFragment(mContentFragment);
 				}else if (status == 1) {
 					// get logout
 					getLogout();
@@ -153,8 +167,22 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		
 		// goto layout
 		if (mContentFragment != null && flagSwithView) {
-			MainActivity.slideMenu.toggle();
-			switchFragment(mContentFragment);
+			if (flagCheckUser) {
+				if (GlobalFunction.isRegister(getActivity())) {
+					if (GlobalFunction.isLogin(getActivity())) {
+						MainActivity.slideMenu.toggle();
+						switchFragment(mContentFragment);
+					}else{
+						GlobalFunction.showDialog(getActivity(), "You need to login before use this function", "Ok", null, null, null);
+					}
+				}else{
+					GlobalFunction.showDialog(getActivity(), "You need to regsiter before use this function", "Ok", null, null, null);
+				}
+			}else{
+				MainActivity.slideMenu.toggle();
+				switchFragment(mContentFragment);
+			}
+			
 		}
 	}
 	
@@ -213,7 +241,6 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		View view = inf.inflate(R.layout.menu_layout, null);
 		initView(view);
 		setUpStatusLogin(token, context);
-		Log.i("XXXX = ", "TT = " +token);
-		Log.i("XXXX = ", "CC = " +context);
 	}
+	
 }

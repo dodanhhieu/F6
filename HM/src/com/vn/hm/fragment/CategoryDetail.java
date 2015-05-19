@@ -31,9 +31,11 @@ import android.widget.VideoView;
 
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
+import com.d3.base.GlobalFunction;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
 import com.vn.hm.R;
@@ -68,6 +70,7 @@ public class CategoryDetail extends BaseFragment {
 				.showImageOnFail(R.drawable.ic_launcher)
 				.showStubImage(R.drawable.ic_launcher)
 				.showImageForEmptyUri(R.drawable.ic_launcher).cacheInMemory()
+				.imageScaleType(ImageScaleType.NONE_SAFE)
 				.build();
 		imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
 		MainActivity.updateTitleHeader(D3Utils.SCREEN.DETAIL_CATEGORY_WORKOUT);
@@ -81,7 +84,15 @@ public class CategoryDetail extends BaseFragment {
 					long arg3) {
 				String urlVideo = listData.get(position).getVideo();
 				Log.i(TAG, "videoUrl " + urlVideo);
-				playVideoExercise(urlVideo);
+				if (GlobalFunction.isRegister(getActivity())) {
+					if (GlobalFunction.isLogin(getActivity())) {
+						playVideoExercise(urlVideo);
+					}else{
+						GlobalFunction.showDialog(getActivity(), "Please LOGIN to play video", "Ok", null, null, null);
+					}
+				}else{
+					GlobalFunction.showDialog(getActivity(), "Please register account to play video", "Ok", null, null, null);
+				}
 			}
 		});
 

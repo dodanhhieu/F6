@@ -77,4 +77,29 @@ public class GlobalFunction {
 		builder.show();
 
 	}
+	
+	/**
+	 * check user regsiter
+	 * @param context
+	 * @return true : registed
+	 */
+	public static boolean isRegister(Context context){
+		DataSharePref dataSharePref = new DataSharePref(context);
+		Log.i("GLOBAL", "TOKEN : " + dataSharePref.getString(D3Utils.TOKEN_KEY));
+		if (dataSharePref.getString(D3Utils.TOKEN_KEY) != null) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public static boolean isLogin(Context context){
+		DataSharePref dataSharePref = new DataSharePref(context);
+		Log.i("GLOBAL", "LOGIN : " + dataSharePref.getInt(D3Utils.LOGIN_KEY));
+		if (dataSharePref.getInt(D3Utils.LOGIN_KEY) == 1) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
