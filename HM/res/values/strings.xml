@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HM</string>
+    <string name="app_name"> FITNESS AND GYM</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -40,4 +40,7 @@
     <string name="msg_input_name">Please enter name</string>
     <string name="save">SAVE</string>
 
+    <string name="lightning">Begin</string>
+    <string name="color_baloonss">Color Baloons</string>
+    <string name="natural_walll">Natural Wall</string>
 </resources>

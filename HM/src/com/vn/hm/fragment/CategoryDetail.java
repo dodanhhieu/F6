@@ -202,6 +202,7 @@ public class CategoryDetail extends BaseFragment {
 					Log.i(TAG, "Add to workout");
 					String title = data.get(position).getTitle();
 					String strDes = data.get(position).getDescription();
+					GlobalFunction.showDialog(mContext, "Add workout success", "OK", null, null, null);
 					CalendarUtility.addEvent(getActivity(), title,
 						    strDes, System.currentTimeMillis() + 15000,
 						    System.currentTimeMillis() + 30000);

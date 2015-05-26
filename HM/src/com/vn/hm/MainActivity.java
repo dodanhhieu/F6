@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.d3.base.BaseActivity;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -31,6 +33,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private static TextView txtTitle;
 	private String strTitle = "HOME";	
 	private View headerView;
+	MenuFragment menuFragme;
+	EventListener event;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +75,14 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		 StrictMode.setThreadPolicy(policy);
 		 
 		 //settingCalendar();
-
+		 slideMenu.setOnOpenListener(new OnOpenListener() {
+			
+			@Override
+			public void onOpen() {
+				
+				
+			}
+		});
 	}
 	
 	public void switchContent(android.support.v4.app.Fragment fragment) {

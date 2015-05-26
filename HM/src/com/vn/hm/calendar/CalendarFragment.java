@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -22,9 +24,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.d3.base.D3Utils;
-import com.vn.hm.MainActivity;
 import com.vn.hm.R;
+import com.vn.hm.calendar.ListEventAdapter.ItemClickListener;
 
 public class CalendarFragment extends Fragment implements OnClickListener,
 	OnItemClickListener {
@@ -43,12 +44,31 @@ public class CalendarFragment extends Fragment implements OnClickListener,
     private ArrayList<CalendarEvent> events, dayEvent;
     private ListEventAdapter eventAdapter;
 
+    private ItemClickListener ItemClickListener = new ItemClickListener() {
+
+	@Override
+	public void onDelete(int position) {
+	    // delete in db
+	    CalendarEvent event = dayEvent.get(position);
+	    CalendarUtility.deleteEvent(getActivity(), event.getTitle(),
+		    event.getDesc(), event.getTimeStart());
+
+	    // update calendar view
+	    events.remove(event);
+	    adapter.notifyDataSetChanged();
+
+	    // update list event
+	    dayEvent.remove(position);
+	    eventAdapter.notifyDataSetChanged();
+	    
+	}
+    };
+
     @SuppressLint("InflateParams")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
 	View v = inflater.inflate(R.layout.fragment_calendar, null);
-	MainActivity.updateTitleHeader(D3Utils.SCREEN.CALENDAR);
 	Locale.setDefault(Locale.US);
 
 	month = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -65,7 +85,8 @@ public class CalendarFragment extends Fragment implements OnClickListener,
 
 	events = CalendarUtility.readCalendarEvent(getActivity());
 	dayEvent = new ArrayList<CalendarEvent>();
-	eventAdapter = new ListEventAdapter(getActivity(), dayEvent);
+	eventAdapter = new ListEventAdapter(getActivity(), dayEvent,
+		ItemClickListener);
 	lvEvent = (ListView) v.findViewById(R.id.listEvent);
 	lvEvent.setAdapter(eventAdapter);
 	for (int i = 0; i < events.size(); i++) {

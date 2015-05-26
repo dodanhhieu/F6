@@ -1,6 +1,8 @@
 package com.vn.hm.fragment;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
@@ -30,10 +32,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.activeandroid.query.Select;
 import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
 import com.d3.base.GlobalFunction;
+import com.d3.base.db.UserAccount;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
 import com.vn.hm.MenuFragment;
@@ -45,7 +49,7 @@ public class LoginFragment extends BaseFragment {
 	private EditText etEmail, etPassword;
 	private Button btnLogin;
 	private String TAG = "LoginFragment";
-
+	private String email,password;
 	@Override
 	public int getlayout() {
 		// TODO Auto-generated method stub
@@ -58,6 +62,9 @@ public class LoginFragment extends BaseFragment {
 		etEmail = (EditText) view.findViewById(R.id.etEmail);
 		etPassword = (EditText) view.findViewById(R.id.etPass);
 		btnLogin = (Button) view.findViewById(R.id.btnLogin);
+		updateData();
+		
+		Log.i(TAG, "Email : " + email);
 		btnLogin.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -66,7 +73,16 @@ public class LoginFragment extends BaseFragment {
 			}
 		});
 	}
-
+	private void updateData(){
+		Select select = new Select();
+		ArrayList<UserAccount> listAccount = select.all().from(UserAccount.class).execute();
+		if (listAccount.size() > 0) {
+			Collections.reverse(listAccount);
+			UserAccount user = listAccount.get(0);
+			email = user.email;
+			password = user.password;
+		}
+	}
 	private void login() {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER
@@ -82,7 +98,7 @@ public class LoginFragment extends BaseFragment {
 			// Create local HTTP context
 			HttpContext localContext = new BasicHttpContext();
 			// Bind custom cookie store to the local context
-			Cookie cookie = new BasicClientCookie("name", "value-longsex");
+			Cookie cookie = new BasicClientCookie("name", "value-long");
 			cookieStore.addCookie(cookie);
 			localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 
@@ -127,6 +143,9 @@ public class LoginFragment extends BaseFragment {
 								.getJSONObject("responsse_data");
 						token = jsonData.getString("data");
 						String status = jsonData.getString("status");
+						
+						//token = "asdasiefnjn12e324qczxcsfas4";
+						//status = "1";
 						if (status.equalsIgnoreCase("0")) {
 							GlobalFunction.showDialog(getActivity(),
 									"Login fail", "OK", null, null, null);

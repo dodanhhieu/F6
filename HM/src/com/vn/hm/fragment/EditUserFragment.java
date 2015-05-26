@@ -132,6 +132,7 @@ public class EditUserFragment extends BaseFragment {
 			etPassword.setText(user.password);
 		}
 	}
+	
 	private void registerAccount() {
 
 //		HashMap<String, String> params = new HashMap<String, String>();

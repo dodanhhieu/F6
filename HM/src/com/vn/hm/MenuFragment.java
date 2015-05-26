@@ -16,6 +16,7 @@ import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
 import com.d3.base.GlobalFunction;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.vn.hm.calendar.CalendarFragment;
 import com.vn.hm.fragment.BmiFragment;
 import com.vn.hm.fragment.CateHealthNutritionFragment;
@@ -25,7 +26,7 @@ import com.vn.hm.fragment.HeartTrackFragment;
 import com.vn.hm.fragment.LoginFragment;
 import com.vn.hm.fragment.RegisterFragment;
 
-public class MenuFragment extends BaseFragment implements OnClickListener {
+public class MenuFragment extends BaseFragment implements OnClickListener,EventListener {
 
 	private TextView funcGym, funcBmi, funcTracker, funcLogin,
 			 funcRegister,funcTips,funcEditProfile,funcCalendar;
@@ -36,6 +37,8 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 	private String token;
 	private String TAG = "MenuFragment";
 	private ImageView imgProfile;
+	
+	
 	public MenuFragment() {
 
 	}
@@ -81,10 +84,20 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		token = sharePref.getString(D3Utils.TOKEN_KEY);
 		setUpStatusLogin(token,getActivity());
 		Log.i(TAG , "init View");
-		
+		MainActivity.slideMenu.setOnOpenListener(new OnOpenListener() {
+			
+			@Override
+			public void onOpen() {
+				Log.i("Menu", "open");
+				setUpStatusLogin(token,getActivity());
+			}
+		});
 	}
 	boolean flagSwithView = false;
 	boolean flagCheckUser = false;
+	
+	
+	
 	@Override
 	public void onClick(View v) {
 		int idView = v.getId();
@@ -241,6 +254,12 @@ public class MenuFragment extends BaseFragment implements OnClickListener {
 		View view = inf.inflate(R.layout.menu_layout, null);
 		initView(view);
 		setUpStatusLogin(token, context);
+	}
+
+	@Override
+	public void UpdateUI() {
+		Log.i(TAG, "vao day cho anh");
+		
 	}
 	
 }

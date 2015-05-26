@@ -152,7 +152,7 @@ public class RegisterFragment extends BaseFragment {
 		    // Create local HTTP context
 		    HttpContext localContext = new BasicHttpContext();
 		    // Bind custom cookie store to the local context
-		    Cookie cookie = new BasicClientCookie("name", "value-longsex");
+		    Cookie cookie = new BasicClientCookie("name", "value-long");
 		    cookieStore.addCookie(cookie);
 		    localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 		    
