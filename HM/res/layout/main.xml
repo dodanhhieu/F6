@@ -4,95 +4,19 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ViewFlipper
-        android:id="@+id/view_flipper"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher" />
-
-            <TextView
-                style="@style/ImageTitle"
-                android:text="@string/lightning" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher" />
-
-            <TextView
-                style="@style/ImageTitle"
-                android:text="@string/lightning" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher" />
-
-            <TextView
-                style="@style/ImageTitle"
-                android:text="@string/lightning" />
-        </RelativeLayout>
-    </ViewFlipper>
-
-    <LinearLayout
-        style="@style/ButtonContainer"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/play"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="@dimen/dimen_0dp"
-            android:layout_marginRight="10dp"
-            android:background="@null" />
-
-        <Button
-            android:id="@+id/stop"
-            android:layout_width="@dimen/dimen_0dp"
-            android:layout_height="@dimen/dimen_0dp"
-            android:background="@null" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/swipe_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/swipe_left" />
-
-    <ImageView
-        android:id="@+id/swipe_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/swipe_right" />
-
+    <android.support.v4.view.ViewPager
+        android:id="@+id/myfivepanelpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+	<TextView 
+	    android:id="@+id/txt_begin_id"
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/dimen_40dp"
+	    android:text="BEGIN"
+	    android:textColor="#FFFFFF"
+	    android:textSize="@dimen/dimen_20dp"
+	    android:gravity="center"
+	    android:layout_alignParentBottom="true"
+	    android:textStyle="bold"
+	    />
 </RelativeLayout>
