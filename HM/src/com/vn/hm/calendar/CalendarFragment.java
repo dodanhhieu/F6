@@ -50,8 +50,7 @@ public class CalendarFragment extends Fragment implements OnClickListener,
 	public void onDelete(int position) {
 	    // delete in db
 	    CalendarEvent event = dayEvent.get(position);
-	    CalendarUtility.deleteEvent(getActivity(), event.getTitle(),
-		    event.getDesc(), event.getTimeStart());
+	    CalendarUtility.deleteEvent(getActivity(), event.getId());
 
 	    // update calendar view
 	    events.remove(event);

@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 public class CalendarUtility {
 
@@ -22,7 +21,7 @@ public class CalendarUtility {
 	ArrayList<CalendarEvent> events = new ArrayList<CalendarEvent>();
 	Uri uri = Uri.parse(getCalendarUriBase(context) + "events");
 	String[] projection = new String[] { "calendar_id", "title",
-		"description", "dtstart", "dtend", "eventLocation" };
+		"description", "dtstart", "dtend", "eventLocation", "_id" };
 	Cursor cursor = context.getContentResolver().query(uri, projection,
 		null, null, null);
 	cursor.moveToFirst();
@@ -37,6 +36,7 @@ public class CalendarUtility {
 	    event.setTimeStart(cursor.getLong(3));
 	    event.setTimeEnd(cursor.getLong(4));
 	    event.setDateStart(getDate(cursor.getLong(3)));
+	    event.setId(cursor.getInt(6));
 	    CNames[i] = cursor.getString(1);
 	    cursor.moveToNext();
 	    events.add(event);
@@ -44,7 +44,7 @@ public class CalendarUtility {
 	return events;
     }
 
-    public static void addEvent(Context context, String tile, String desc,
+    public static void addEvent(Context context, String title, String desc,
 	    long timeStart, long timeEnd) {
 	// get calendar
 	Uri EVENTS_URI = Uri.parse(getCalendarUriBase(context) + "events");
@@ -53,7 +53,7 @@ public class CalendarUtility {
 	// event insert
 	ContentValues values = new ContentValues();
 	values.put("calendar_id", 2);
-	values.put("title", tile);
+	values.put("title", title);
 	values.put("description", desc);
 	values.put("allDay", 0);
 	values.put("dtstart", timeStart);
@@ -61,28 +61,30 @@ public class CalendarUtility {
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
 	// values.put("visibility", 0);
 	values.put("hasAlarm", 1);
-	cr.insert(EVENTS_URI, values);
+	Uri insertUri = cr.insert(EVENTS_URI, values);
 
 	// Set alarm
 	AlarmManager am = (AlarmManager) context
 		.getSystemService(Context.ALARM_SERVICE);
 	Intent i = new Intent(context, AlarmRecerver.class);
-	i.putExtra("title", tile);
+	i.putExtra("title", title);
 	i.putExtra("desc", desc);
-	PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+	PendingIntent pi = PendingIntent.getBroadcast(context,
+		Integer.valueOf(insertUri.getLastPathSegment()), i, 0);
 	am.set(AlarmManager.RTC_WAKEUP, timeStart, pi);
     }
 
-    public static void deleteEvent(Context context, String title, String desc,
-	    long timeStart) {
-	int i = context.getContentResolver().delete(
+    public static void deleteEvent(Context context, int eventId) {
+	context.getContentResolver().delete(
 		Uri.parse(getCalendarUriBase(context) + "events"),
-		"calendar_id=? and title =? and description=? and dtstart=? ",
-		new String[] { "2", title, desc, String.valueOf(timeStart) });
+		"_id = " + eventId, null);
 
-
-	Log.d("AAA", "delete: " + i);
-	
+	// Cancel alarm
+	AlarmManager am = (AlarmManager) context
+		.getSystemService(Context.ALARM_SERVICE);
+	Intent i = new Intent(context, AlarmRecerver.class);
+	PendingIntent pi = PendingIntent.getBroadcast(context, eventId, i, 0);
+	am.cancel(pi);
     }
 
     @SuppressLint("SimpleDateFormat")
