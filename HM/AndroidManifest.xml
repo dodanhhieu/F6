@@ -27,13 +27,23 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
+        </activity>
+        <activity android:name="com.hm.heart_rate_monitor.HeartRateMonitor" >
+        </activity>
+        <activity 
+            android:name="com.vn.hm.PageIndicatorActivity"
+            android:label="@string/app_name"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.hm.heart_rate_monitor.HeartRateMonitor" >
         </activity>
         <receiver android:name="com.vn.hm.calendar.AlarmRecerver" />
     </application>
