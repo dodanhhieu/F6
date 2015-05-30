@@ -59,7 +59,7 @@ public class CalendarUtility {
 	values.put("dtstart", timeStart);
 	values.put("dtend", timeEnd);
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
-	// values.put("visibility", 0);
+//	 values.put("visibility", 1);
 	values.put("hasAlarm", 1);
 	Uri insertUri = cr.insert(EVENTS_URI, values);
 
