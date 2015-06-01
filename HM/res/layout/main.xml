@@ -13,10 +13,11 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="@dimen/dimen_40dp"
 	    android:text="BEGIN"
-	    android:textColor="#FFFFFF"
+	    android:textColor="@color/green_dam"
 	    android:textSize="@dimen/dimen_20dp"
 	    android:gravity="center"
 	    android:layout_alignParentBottom="true"
 	    android:textStyle="bold"
+	    android:visibility="gone"
 	    />
 </RelativeLayout>

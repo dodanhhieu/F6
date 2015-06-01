@@ -11,8 +11,8 @@ public class Heart extends Model{
 
 	private String TAG = "Heart";
 	
-	@Column(name = "name")
-	public String name;
+	@Column(name = "comment")
+	public String comment;
 	
 	@Column(name = "indexHeart")
 	public int indexHeart;
@@ -25,9 +25,9 @@ public class Heart extends Model{
 		super();
 	}
 	
-	public Heart(String name, int indexHeart, String date){
+	public Heart(String comment, int indexHeart, String date){
 		super();
-		this.name = name;
+		this.comment = comment;
 		this.indexHeart = indexHeart;
 		this.date = date;
 		Log.i(TAG, "dave done");

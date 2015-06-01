@@ -23,6 +23,7 @@
         android:textColor="@color/green_dam"
         android:layout_alignParentBottom="true"
         android:gravity="center"
+        
          />
 		   />
 

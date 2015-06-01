@@ -215,7 +215,16 @@ public class HeartRateMonitor extends Activity {
 		LayoutInflater inf = LayoutInflater.from(this);
 		View view = inf.inflate(R.layout.input_bpm_layout, null);
 		builder.setView(view);
-		final EditText edtInput = (EditText)view.findViewById(R.id.input_name_id);
+		final TextView edtInput = (TextView)view.findViewById(R.id.input_name_id);
+		final String strComment;
+		if (beatsAvg < 60) {
+			strComment = " LOW";
+		}else if( beatsAvg >= 60 && beatsAvg <= 120){
+			strComment = " NORMAL";
+		}else{
+			strComment = " HIGH";
+		}
+		edtInput.setText("your heart rate is "+strComment);
 		builder.setCancelable(false);
 		builder.setPositiveButton("SAVE", new OnClickListener() {
 			
@@ -230,7 +239,7 @@ public class HeartRateMonitor extends Activity {
 				intent.putExtra("DONE", true);
 				setResult(RESULT_OK, intent);
 				Heart h = new Heart();
-				h.name = edtInput.getText().toString();
+				h.comment = strComment;
 				h.indexHeart = beatsAvg;
 				h.date = currentDate;
 				h.save();

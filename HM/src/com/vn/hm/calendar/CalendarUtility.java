@@ -157,6 +157,7 @@ public class CalendarUtility {
 		Calendars.CALENDAR_DISPLAY_NAME, // 2
 		Calendars.OWNER_ACCOUNT // 3
 	};
+	
 	Cursor cur = cr.query(Calendars.CONTENT_URI, EVENT_PROJECTION,
 		selection, selectionArgs, null);
 	while (cur.moveToNext()) {

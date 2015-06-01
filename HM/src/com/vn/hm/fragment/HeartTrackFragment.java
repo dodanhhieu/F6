@@ -137,11 +137,12 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 		ArrayList<Heart> list = select.all().from(Heart.class).execute();
 		if (list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
-				Log.i(TAG, "Value = " + list.get(i).date + " ; " + list.get(i).name + " ; " + list.get(i).indexHeart);
+				Log.i(TAG, "Value = " + list.get(i).date + " ; " + list.get(i).comment + " ; " + list.get(i).indexHeart);
 			}
 			HistoryAdapter adatpter = new HistoryAdapter(getActivity(), list);
 			listView.setAdapter(adatpter);
 			txtBpm.setText(String.valueOf(list.get(0).indexHeart));
+			
 		}
 	}
 	
@@ -182,12 +183,14 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 				view = inf.inflate(R.layout.bpm_item, null);
 				holder.txtBpm = (TextView)view.findViewById(R.id.bpmitem_index_id);
 				holder.txtDate = (TextView)view.findViewById(R.id.bpmitem_date_id);
+				holder.txtComment = (TextView)view.findViewById(R.id.bpmitem_comment_id);
 				view.setTag(holder);
 			}else{
 				holder = (Holder)view.getTag();
 			}
 			holder.txtBpm.setText(String.valueOf(listData.get(position).indexHeart));
 			holder.txtDate.setText(listData.get(position).date);
+			holder.txtComment.setText(listData.get(position).comment);
 			return view;
 		}
 		
@@ -196,5 +199,6 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 	private class Holder{
 		private TextView txtBpm;
 		private TextView txtDate;
+		private TextView txtComment;
 	}
 }
