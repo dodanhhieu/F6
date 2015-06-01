@@ -14,17 +14,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Calendars;
 
 public class CalendarUtility {
 
     public static ArrayList<CalendarEvent> readCalendarEvent(Context context) {
+	long myCalId = getCalendarId(context);
 	ArrayList<CalendarEvent> events = new ArrayList<CalendarEvent>();
 	Uri uri = Uri.parse(getCalendarUriBase(context) + "events");
-	String[] projection = new String[] { "calendar_id", "title",
-		"description", "dtstart", "dtend", "eventLocation" };
+	String[] projection = new String[] { "_id", "title", "description",
+		"dtstart", "dtend", "eventLocation", };
 	Cursor cursor = context.getContentResolver().query(uri, projection,
-		null, null, null);
+		"calendar_id = " + myCalId, null, null);
 	cursor.moveToFirst();
 
 	// fetching calendars name
@@ -32,6 +34,7 @@ public class CalendarUtility {
 	// fetching calendars id
 	for (int i = 0; i < CNames.length; i++) {
 	    CalendarEvent event = new CalendarEvent();
+	    event.setId(cursor.getInt(0));
 	    event.setTitle(cursor.getString(1));
 	    event.setDesc(cursor.getString(2));
 	    event.setTimeStart(cursor.getLong(3));
@@ -44,45 +47,47 @@ public class CalendarUtility {
 	return events;
     }
 
-    public static void addEvent(Context context, String tile, String desc,
+    public static void addEvent(Context context, String title, String desc,
 	    long timeStart, long timeEnd) {
 	// get calendar
 	Uri EVENTS_URI = Uri.parse(getCalendarUriBase(context) + "events");
 	ContentResolver cr = context.getContentResolver();
 
+	long myCalId = getCalendarId(context);
 	// event insert
 	ContentValues values = new ContentValues();
-	values.put("calendar_id", 2);
-	values.put("title", tile);
+	values.put("calendar_id", String.valueOf(myCalId));
+	values.put("title", title);
 	values.put("description", desc);
 	values.put("allDay", 0);
 	values.put("dtstart", timeStart);
 	values.put("dtend", timeEnd);
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
-	// values.put("visibility", 0);
 	values.put("hasAlarm", 1);
-	cr.insert(EVENTS_URI, values);
+	Uri insertUri = cr.insert(EVENTS_URI, values);
 
 	// Set alarm
 	AlarmManager am = (AlarmManager) context
 		.getSystemService(Context.ALARM_SERVICE);
 	Intent i = new Intent(context, AlarmRecerver.class);
-	i.putExtra("title", tile);
+	i.putExtra("title", title);
 	i.putExtra("desc", desc);
-	PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+	PendingIntent pi = PendingIntent.getBroadcast(context,
+		Integer.valueOf(insertUri.getLastPathSegment()), i, 0);
 	am.set(AlarmManager.RTC_WAKEUP, timeStart, pi);
     }
 
-    public static void deleteEvent(Context context, String title, String desc,
-	    long timeStart) {
-	int i = context.getContentResolver().delete(
+    public static void deleteEvent(Context context, int eventId) {
+	context.getContentResolver().delete(
 		Uri.parse(getCalendarUriBase(context) + "events"),
-		"calendar_id=? and title =? and description=? and dtstart=? ",
-		new String[] { "2", title, desc, String.valueOf(timeStart) });
+		"_id = " + eventId, null);
 
-
-	Log.d("AAA", "delete: " + i);
-	
+	// Cancel alarm
+	AlarmManager am = (AlarmManager) context
+		.getSystemService(Context.ALARM_SERVICE);
+	Intent i = new Intent(context, AlarmRecerver.class);
+	PendingIntent pi = PendingIntent.getBroadcast(context, eventId, i, 0);
+	am.cancel(pi);
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -128,5 +133,50 @@ public class CalendarUtility {
 	    }
 	}
 	return calendarUriBase;
+    }
+
+    @SuppressLint("NewApi")
+    private static long getCalendarId(Context context) {
+	long calId = 0;
+	ContentResolver cr = context.getContentResolver();
+	String selection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
+		+ Calendars.ACCOUNT_TYPE + " = ?) AND ("
+		+ Calendars.OWNER_ACCOUNT + " = ?))";
+	String[] selectionArgs = new String[] { "hieudodanh@gmail.com",
+		"com.google", "hieudodanh@gmail.com" };
+	final String[] EVENT_PROJECTION = new String[] { Calendars._ID, // 0
+		Calendars.ACCOUNT_NAME, // 1
+		Calendars.CALENDAR_DISPLAY_NAME, // 2
+		Calendars.OWNER_ACCOUNT // 3
+	};
+	Cursor cur = cr.query(Calendars.CONTENT_URI, EVENT_PROJECTION,
+		selection, selectionArgs, null);
+	while (cur.moveToNext()) {
+	    calId = cur.getLong(0);
+	}
+	if (calId == 0) {
+	    ContentValues values = new ContentValues();
+	    values.put(Calendars.NAME, "MyGym");
+	    values.put(Calendars.CALENDAR_DISPLAY_NAME, "MyGym");
+	    values.put(Calendars.VISIBLE, 1);
+	    values.put(Calendars.ACCOUNT_NAME, "hieudodanh@gmail.com");
+	    values.put(Calendars.ACCOUNT_TYPE,
+		    CalendarContract.ACCOUNT_TYPE_LOCAL);
+	    values.put(Calendars.OWNER_ACCOUNT, "hieudodanh@gmail.com");
+	    Uri calUri = Calendars.CONTENT_URI;
+	    calUri = calUri
+		    .buildUpon()
+		    .appendQueryParameter(
+			    CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+		    .appendQueryParameter(
+			    CalendarContract.Calendars.ACCOUNT_NAME,
+			    "hieudodanh@gmail.com")
+		    .appendQueryParameter(
+			    CalendarContract.Calendars.ACCOUNT_TYPE,
+			    CalendarContract.ACCOUNT_TYPE_LOCAL).build();
+	    Uri insertUri = cr.insert(calUri, values);
+	    calId = Long.valueOf(insertUri.getLastPathSegment());
+	}
+	return calId;
     }
 }
