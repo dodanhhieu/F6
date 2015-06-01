@@ -7,6 +7,7 @@
 
     <!-- define main function -->
     <string name="gym_training">GYM TRAINGING</string>
+    <string name="gym_training_women">WOMEN GYM TRAINGING</string>
     <string name="heart_traking">HEART TRACKER</string>
     <string name="bmi">BMI</string>
     <string name="health_nutrition_tip">HEALTH-NUTRITION</string>

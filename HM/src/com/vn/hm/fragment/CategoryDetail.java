@@ -1,8 +1,10 @@
 package com.vn.hm.fragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +16,12 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +34,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.d3.base.BaseFragment;
@@ -52,6 +60,38 @@ public class CategoryDetail extends BaseFragment {
 	private DisplayImageOptions options;
 	private ImageLoader imageLoader;
 	private int idCate;
+
+	int mHour,nHour; 
+	int mMinute,nMinute;
+	
+	private String title,strDes;
+	/** This handles the message send from TimePickerDialogFragment on setting Time */
+	int count = 0;
+	Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message m){   
+        	/** Creating a bundle object to pass currently set Time to the fragment */
+        	Log.i(TAG, "COUNT = " + count++);
+        	if (count == 1) {
+				
+			
+        	Bundle b = m.getData();
+        	
+        	/** Getting the Hour of day from bundle */
+    		nHour = b.getInt("set_hour");
+    		
+    		/** Getting the Minute of the hour from bundle */
+    		nMinute = b.getInt("set_minute");
+    		
+			Log.i(TAG, "Hour 1 == " + mHour);
+//    		Toast.makeText(getActivity(), b.getString("today :"), Toast.LENGTH_SHORT).show();
+    		
+			CalendarUtility.addEvent(getActivity(), title,   strDes, System.currentTimeMillis()+ (nHour - mHour)*60*60*1000 + (nMinute - mMinute)*60*1000, System.currentTimeMillis() + 30000);
+			Log.i(TAG, "curentime == " + System.currentTimeMillis());
+			GlobalFunction.showDialog(getActivity(), "Add workout success", "OK", null, null, null);
+        	}
+        }
+	};
 
 	public CategoryDetail(int cateId) {
 		this.idCate = cateId;
@@ -95,7 +135,8 @@ public class CategoryDetail extends BaseFragment {
 				}
 			}
 		});
-
+		
+		
 	}
 
 	private void getAllDataCate(int idCate) {
@@ -200,13 +241,47 @@ public class CategoryDetail extends BaseFragment {
 				@Override
 				public void onClick(View arg0) {
 					Log.i(TAG, "Add to workout");
-					String title = data.get(position).getTitle();
-					String strDes = data.get(position).getDescription();
-					GlobalFunction.showDialog(mContext, "Add workout success", "OK", null, null, null);
-					CalendarUtility.addEvent(getActivity(), title,
-						    strDes, System.currentTimeMillis() + 15000,
-						    System.currentTimeMillis() + 30000);
+					title = data.get(position).getTitle();
+					strDes = data.get(position).getDescription();
 					
+//					GlobalFunction.showDialog(mContext, "Add workout success", "OK", null, null, null);
+//					CalendarUtility.addEvent(getActivity(), title,
+//						    strDes, System.currentTimeMillis() + 15000,
+//						    System.currentTimeMillis() + 30000);
+					
+					
+					/** Creating a bundle object to pass currently set time to the fragment */
+					Bundle b = new Bundle();
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeZone(TimeZone.getDefault());
+					mHour = cal.get(Calendar.HOUR_OF_DAY);
+					mMinute = cal.get(Calendar.MINUTE);
+					Log.i(TAG, "Hour == " + mHour);
+					/** Adding currently set hour to bundle object */
+					b.putInt("set_hour", mHour);
+					
+					/** Adding currently set minute to bundle object */
+					b.putInt("set_minute", mMinute);
+//					b.putInt("set_am", cal.get(Calendar.AM_PM));
+					
+					/** Instantiating TimePickerDialogFragment */
+					TimePickerDialogFragment timePicker = new TimePickerDialogFragment(mHandler);
+					count = 0;
+					/** Setting the bundle object on timepicker fragment */
+					timePicker.setArguments(b);			
+					
+					
+					/** Getting fragment manger for this activity */
+					FragmentManager fm = getActivity().getSupportFragmentManager();				
+					
+					/** Starting a fragment transaction */
+					FragmentTransaction ft = fm.beginTransaction();
+					
+					/** Adding the fragment object to the fragment transaction */
+					ft.add(timePicker, "time_picker");
+					
+					/** Opening the TimePicker fragment */
+					ft.commit();
 				}
 			});
 			
@@ -251,4 +326,6 @@ public class CategoryDetail extends BaseFragment {
 		getActivity().startActivity(mediaIntent);
 
 	}
+	
+	 
 }

@@ -171,19 +171,19 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 				value4.setTextColor(getResources().getColor(R.color.green_dam));
 				value5.setTextColor(getResources().getColor(R.color.green_dam));
 				
-			}else if(bmiValue > 20.0 && bmiValue < 25.0){
+			}else if(bmiValue > 20.0 && bmiValue <= 25.0){
 				value1.setTextColor(getResources().getColor(R.color.green_dam));
 				value2.setTextColor(getResources().getColor(R.color.red_color));
 				value3.setTextColor(getResources().getColor(R.color.green_dam));
 				value4.setTextColor(getResources().getColor(R.color.green_dam));
 				value5.setTextColor(getResources().getColor(R.color.green_dam));
-			}else if(bmiValue > 25.0 && bmiValue < 30.0){
+			}else if(bmiValue > 25.0 && bmiValue <= 30.0){
 				value1.setTextColor(getResources().getColor(R.color.green_dam));
 				value2.setTextColor(getResources().getColor(R.color.green_dam));
 				value3.setTextColor(getResources().getColor(R.color.red_color));
 				value4.setTextColor(getResources().getColor(R.color.green_dam));
 				value5.setTextColor(getResources().getColor(R.color.green_dam));
-			}else if(bmiValue > 30.0 && bmiValue < 40.0){
+			}else if(bmiValue > 30.0 && bmiValue <= 40.0){
 				value1.setTextColor(getResources().getColor(R.color.green_dam));
 				value2.setTextColor(getResources().getColor(R.color.green_dam));
 				value3.setTextColor(getResources().getColor(R.color.green_dam));

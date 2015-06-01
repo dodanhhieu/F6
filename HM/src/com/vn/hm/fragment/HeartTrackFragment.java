@@ -61,6 +61,7 @@ public class HeartTrackFragment extends BaseFragment implements OnClickListener{
 		
 		Select select = new Select();
 		ArrayList<UserAccount> list = select.all().from(UserAccount.class).execute();
+		Collections.reverse(list);
 		if (list.size() > 0) {
 			String name = list.get(0).name;
 			txtName.setText(name);

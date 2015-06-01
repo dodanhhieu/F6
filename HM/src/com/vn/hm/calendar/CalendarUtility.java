@@ -23,8 +23,9 @@ public class CalendarUtility {
 	long myCalId = getCalendarId(context);
 	ArrayList<CalendarEvent> events = new ArrayList<CalendarEvent>();
 	Uri uri = Uri.parse(getCalendarUriBase(context) + "events");
-	String[] projection = new String[] { "_id", "title", "description",
-		"dtstart", "dtend", "eventLocation", };
+
+	String[] projection = new String[] { "calendar_id", "title",
+		"description", "dtstart", "dtend", "eventLocation", "_id" };
 	Cursor cursor = context.getContentResolver().query(uri, projection,
 		"calendar_id = " + myCalId, null, null);
 	cursor.moveToFirst();
@@ -40,6 +41,7 @@ public class CalendarUtility {
 	    event.setTimeStart(cursor.getLong(3));
 	    event.setTimeEnd(cursor.getLong(4));
 	    event.setDateStart(getDate(cursor.getLong(3)));
+	    event.setId(cursor.getInt(6));
 	    CNames[i] = cursor.getString(1);
 	    cursor.moveToNext();
 	    events.add(event);
@@ -56,13 +58,16 @@ public class CalendarUtility {
 	long myCalId = getCalendarId(context);
 	// event insert
 	ContentValues values = new ContentValues();
-	values.put("calendar_id", String.valueOf(myCalId));
+
+	values.put("calendar_id", 2);
+
 	values.put("title", title);
 	values.put("description", desc);
 	values.put("allDay", 0);
 	values.put("dtstart", timeStart);
 	values.put("dtend", timeEnd);
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
+
 	values.put("hasAlarm", 1);
 	Uri insertUri = cr.insert(EVENTS_URI, values);
 

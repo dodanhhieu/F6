@@ -25,10 +25,11 @@ import com.vn.hm.fragment.ExerciseCategory;
 import com.vn.hm.fragment.HeartTrackFragment;
 import com.vn.hm.fragment.LoginFragment;
 import com.vn.hm.fragment.RegisterFragment;
+import com.vn.hm.fragment.WomanExerciseCategory;
 
 public class MenuFragment extends BaseFragment implements OnClickListener,EventListener {
 
-	private TextView funcGym, funcBmi, funcTracker, funcLogin,
+	private TextView funcGym,funcGymWomen, funcBmi, funcTracker, funcLogin,
 			 funcRegister,funcTips,funcEditProfile,funcCalendar;
 	private Fragment mContentFragment;
 	private LinearLayout llLogin,llEditProfile;
@@ -78,6 +79,9 @@ public class MenuFragment extends BaseFragment implements OnClickListener,EventL
 		imgProfile = (ImageView)view.findViewById(R.id.menu_img_profile_id);
 		imgProfile.setOnClickListener(this);
 		
+		funcGymWomen = (TextView)view.findViewById(R.id.menu_gym_women_id);
+		funcGymWomen.setOnClickListener(this);
+		
 		funcCalendar = (TextView) view.findViewById(R.id.menu_calendar);
 		funcCalendar.setOnClickListener(this);
 		DataSharePref sharePref = new DataSharePref(getActivity());
@@ -104,6 +108,11 @@ public class MenuFragment extends BaseFragment implements OnClickListener,EventL
 		switch (idView) {
 		case R.id.menu_gym_id:
 			mContentFragment = new ExerciseCategory();
+			flagSwithView = true;
+			flagCheckUser = false;
+			break;
+		case R.id.menu_gym_women_id:
+			mContentFragment = new WomanExerciseCategory();
 			flagSwithView = true;
 			flagCheckUser = false;
 			break;
