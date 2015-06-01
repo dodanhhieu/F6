@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
+import android.util.Log;
 
 public class CalendarUtility {
 
@@ -59,7 +60,7 @@ public class CalendarUtility {
 	// event insert
 	ContentValues values = new ContentValues();
 
-	values.put("calendar_id", 2);
+	values.put("calendar_id", myCalId);
 
 	values.put("title", title);
 	values.put("description", desc);
@@ -67,7 +68,7 @@ public class CalendarUtility {
 	values.put("dtstart", timeStart);
 	values.put("dtend", timeEnd);
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
-
+	Log.i("CALENDAR", "addEvent" + myCalId);
 	values.put("hasAlarm", 1);
 	Uri insertUri = cr.insert(EVENTS_URI, values);
 
@@ -147,8 +148,10 @@ public class CalendarUtility {
 	String selection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
 		+ Calendars.ACCOUNT_TYPE + " = ?) AND ("
 		+ Calendars.OWNER_ACCOUNT + " = ?))";
+	
 	String[] selectionArgs = new String[] { "hieudodanh@gmail.com",
-		"com.google", "hieudodanh@gmail.com" };
+			CalendarContract.ACCOUNT_TYPE_LOCAL, "hieudodanh@gmail.com" };
+	
 	final String[] EVENT_PROJECTION = new String[] { Calendars._ID, // 0
 		Calendars.ACCOUNT_NAME, // 1
 		Calendars.CALENDAR_DISPLAY_NAME, // 2
