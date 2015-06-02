@@ -72,7 +72,7 @@ public class CategoryDetail extends BaseFragment {
         public void handleMessage(Message m){   
         	/** Creating a bundle object to pass currently set Time to the fragment */
         	Log.i(TAG, "COUNT = " + count++);
-        	if (count == 1) {
+        	//if (count == 1) {
 				
 			
         	Bundle b = m.getData();
@@ -89,7 +89,7 @@ public class CategoryDetail extends BaseFragment {
 			CalendarUtility.addEvent(getActivity(), title,   strDes, System.currentTimeMillis()+ (nHour - mHour)*60*60*1000 + (nMinute - mMinute)*60*1000, System.currentTimeMillis() + 30000);
 			Log.i(TAG, "curentime == " + System.currentTimeMillis());
 			GlobalFunction.showDialog(getActivity(), "Add workout success", "OK", null, null, null);
-        	}
+        	//}
         }
 	};
 

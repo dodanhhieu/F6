@@ -14,16 +14,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Calendars;
+import android.util.Log;
 
 public class CalendarUtility {
 
     public static ArrayList<CalendarEvent> readCalendarEvent(Context context) {
+	long myCalId = getCalendarId(context);
 	ArrayList<CalendarEvent> events = new ArrayList<CalendarEvent>();
 	Uri uri = Uri.parse(getCalendarUriBase(context) + "events");
+
 	String[] projection = new String[] { "calendar_id", "title",
 		"description", "dtstart", "dtend", "eventLocation", "_id" };
 	Cursor cursor = context.getContentResolver().query(uri, projection,
-		null, null, null);
+		"calendar_id = " + myCalId, null, null);
 	cursor.moveToFirst();
 
 	// fetching calendars name
@@ -31,6 +36,7 @@ public class CalendarUtility {
 	// fetching calendars id
 	for (int i = 0; i < CNames.length; i++) {
 	    CalendarEvent event = new CalendarEvent();
+	    event.setId(cursor.getInt(0));
 	    event.setTitle(cursor.getString(1));
 	    event.setDesc(cursor.getString(2));
 	    event.setTimeStart(cursor.getLong(3));
@@ -50,16 +56,19 @@ public class CalendarUtility {
 	Uri EVENTS_URI = Uri.parse(getCalendarUriBase(context) + "events");
 	ContentResolver cr = context.getContentResolver();
 
+	long myCalId = getCalendarId(context);
 	// event insert
 	ContentValues values = new ContentValues();
-	values.put("calendar_id", 2);
+
+	values.put("calendar_id", myCalId);
+
 	values.put("title", title);
 	values.put("description", desc);
 	values.put("allDay", 0);
 	values.put("dtstart", timeStart);
 	values.put("dtend", timeEnd);
 	values.put("eventTimezone", TimeZone.getDefault().getDisplayName());
-//	 values.put("visibility", 1);
+	Log.i("CALENDAR", "addEvent" + myCalId);
 	values.put("hasAlarm", 1);
 	Uri insertUri = cr.insert(EVENTS_URI, values);
 
@@ -130,5 +139,53 @@ public class CalendarUtility {
 	    }
 	}
 	return calendarUriBase;
+    }
+
+    @SuppressLint("NewApi")
+    private static long getCalendarId(Context context) {
+	long calId = 0;
+	ContentResolver cr = context.getContentResolver();
+	String selection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
+		+ Calendars.ACCOUNT_TYPE + " = ?) AND ("
+		+ Calendars.OWNER_ACCOUNT + " = ?))";
+	
+	String[] selectionArgs = new String[] { "hieudodanh@gmail.com",
+			CalendarContract.ACCOUNT_TYPE_LOCAL, "hieudodanh@gmail.com" };
+	
+	final String[] EVENT_PROJECTION = new String[] { Calendars._ID, // 0
+		Calendars.ACCOUNT_NAME, // 1
+		Calendars.CALENDAR_DISPLAY_NAME, // 2
+		Calendars.OWNER_ACCOUNT // 3
+	};
+	
+	Cursor cur = cr.query(Calendars.CONTENT_URI, EVENT_PROJECTION,
+		selection, selectionArgs, null);
+	while (cur.moveToNext()) {
+	    calId = cur.getLong(0);
+	}
+	if (calId == 0) {
+	    ContentValues values = new ContentValues();
+	    values.put(Calendars.NAME, "MyGym");
+	    values.put(Calendars.CALENDAR_DISPLAY_NAME, "MyGym");
+	    values.put(Calendars.VISIBLE, 1);
+	    values.put(Calendars.ACCOUNT_NAME, "hieudodanh@gmail.com");
+	    values.put(Calendars.ACCOUNT_TYPE,
+		    CalendarContract.ACCOUNT_TYPE_LOCAL);
+	    values.put(Calendars.OWNER_ACCOUNT, "hieudodanh@gmail.com");
+	    Uri calUri = Calendars.CONTENT_URI;
+	    calUri = calUri
+		    .buildUpon()
+		    .appendQueryParameter(
+			    CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+		    .appendQueryParameter(
+			    CalendarContract.Calendars.ACCOUNT_NAME,
+			    "hieudodanh@gmail.com")
+		    .appendQueryParameter(
+			    CalendarContract.Calendars.ACCOUNT_TYPE,
+			    CalendarContract.ACCOUNT_TYPE_LOCAL).build();
+	    Uri insertUri = cr.insert(calUri, values);
+	    calId = Long.valueOf(insertUri.getLastPathSegment());
+	}
+	return calId;
     }
 }

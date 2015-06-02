@@ -55,6 +55,7 @@ public class CalendarFragment extends Fragment implements OnClickListener,
 	    // update calendar view
 	    events.remove(event);
 	    adapter.notifyDataSetChanged();
+	    handler.post(calendarUpdater);
 
 	    // update list event
 	    dayEvent.remove(position);

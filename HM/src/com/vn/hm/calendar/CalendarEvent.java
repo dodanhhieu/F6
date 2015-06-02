@@ -1,17 +1,11 @@
 package com.vn.hm.calendar;
 
 public class CalendarEvent {
+
     private int id;
+
     private long timeStart, timeEnd;
     private String title, desc, dateStart;
-
-    public int getId() {
-	return id;
-    }
-
-    public void setId(int id) {
-	this.id = id;
-    }
 
     public long getTimeStart() {
 	return timeStart;
@@ -52,5 +46,13 @@ public class CalendarEvent {
     public void setDateStart(String dateStart) {
 	this.dateStart = dateStart;
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 }

@@ -6,8 +6,8 @@
     <string name="action_settings">Settings</string>
 
     <!-- define main function -->
-    <string name="gym_training">GYM TRAINGING</string>
-    <string name="gym_training_women">WOMEN GYM TRAINGING</string>
+    <string name="gym_training">GYM FOR MEN</string>
+    <string name="gym_training_women">GYM FOR WOMEN</string>
     <string name="heart_traking">HEART TRACKER</string>
     <string name="bmi">BMI</string>
     <string name="health_nutrition_tip">HEALTH-NUTRITION</string>
@@ -38,7 +38,7 @@
     <string name="tap_to_start">Tap to start</string>
     <string name="history">History</string>
     <string name="double_dot">:</string>
-    <string name="msg_input_name">Please enter name</string>
+    <string name="msg_input_name">Heart Track</string>
     <string name="save">SAVE</string>
 
     <string name="lightning">Begin</string>
