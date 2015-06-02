@@ -24,6 +24,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -127,6 +128,7 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 					weightValue = Float.valueOf(strWeight);
 					Log.i(TAG, "W = " + weightValue);
 					calculateBmi();
+//					new UpdateBMI().execute("");
 				}
 				
 			}
@@ -142,9 +144,10 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 		value4.setText("30 - 40");
 		value5.setText("> 40");
 	}
+	
 	private void calculateBmi(){
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		
-//		Metric Units: BMI = Weight (kg) / (Height (m) x Height (m))
 		if (weightValue < 1 || heightValue < 1) {
 			txtResult.setText(String.valueOf(0.0));
 		}else if (weightValue > 1 && heightValue > 1){
@@ -152,10 +155,9 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 			bmiValue = (float)(weightValue / (heightValue * heightValue));
 			bmiValue = bmiValue*10000;
 			bmiValue = Math.round(bmiValue);
-			updateBmi(String.valueOf(bmiValue));
+//			updateBmi(String.valueOf(bmiValue));
 			txtResult.setText(String.valueOf(bmiValue));
 			//log value bmi to db
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	    	final String currentDate = dateFormat.format(new Date());
 	    	BmiTable bmiTable = new BmiTable();
 	    	bmiTable.date = currentDate;
@@ -164,7 +166,7 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 	    	// save done
 			minWeight = (20 * heightValue * heightValue)/10000;
 			maxWeight = (25 * heightValue * heightValue)/10000;
-			if (bmiValue < 20.0) {
+			if (bmiValue <= 20.0) {
 				value1.setTextColor(getResources().getColor(R.color.red_color));
 				value2.setTextColor(getResources().getColor(R.color.green_dam));
 				value3.setTextColor(getResources().getColor(R.color.green_dam));
@@ -206,7 +208,7 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 				// down
 				txtRecommend.setText("YOU NEED TO LOSE WEIGHT AROUND " + String.valueOf(weightRecommend) + " KG");
 			}
-		}else if (bmiValue > 20.0 && bmiValue < 25.0){
+		}else if (bmiValue > 20.0 && bmiValue <= 25.0){
 			txtRecommend.setText(" GOOD BODY! " );
 		}
 		
@@ -340,6 +342,87 @@ public class BmiFragment extends BaseFragment implements OnClickListener {
 			fca.switchContent(fragment,"");
 		}
 
+	}
+	
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private class UpdateBMI extends AsyncTask<String, Void, String>{
+
+		@Override
+		protected String doInBackground(String... params) {
+			if (weightValue < 1 || heightValue < 1) {
+//				txtResult.setText(String.valueOf(0.0));
+			}else if (weightValue > 1 && heightValue > 1){
+				
+				bmiValue = (float)(weightValue / (heightValue * heightValue));
+				bmiValue = bmiValue*10000;
+				bmiValue = Math.round(bmiValue);
+				//updateBmi(String.valueOf(bmiValue));
+				txtResult.setText(String.valueOf(bmiValue));
+				//log value bmi to db
+		    	final String currentDate = dateFormat.format(new Date());
+		    	BmiTable bmiTable = new BmiTable();
+		    	bmiTable.date = currentDate;
+		    	bmiTable.bmiIndex = bmiValue;
+		    	bmiTable.save();
+		    	// save done
+				minWeight = (20 * heightValue * heightValue)/10000;
+				maxWeight = (25 * heightValue * heightValue)/10000;
+				if (bmiValue <= 20.0) {
+					value1.setTextColor(getResources().getColor(R.color.red_color));
+					value2.setTextColor(getResources().getColor(R.color.green_dam));
+					value3.setTextColor(getResources().getColor(R.color.green_dam));
+					value4.setTextColor(getResources().getColor(R.color.green_dam));
+					value5.setTextColor(getResources().getColor(R.color.green_dam));
+					
+				}else if(bmiValue > 20.0 && bmiValue <= 25.0){
+					value1.setTextColor(getResources().getColor(R.color.green_dam));
+					value2.setTextColor(getResources().getColor(R.color.red_color));
+					value3.setTextColor(getResources().getColor(R.color.green_dam));
+					value4.setTextColor(getResources().getColor(R.color.green_dam));
+					value5.setTextColor(getResources().getColor(R.color.green_dam));
+				}else if(bmiValue > 25.0 && bmiValue <= 30.0){
+					value1.setTextColor(getResources().getColor(R.color.green_dam));
+					value2.setTextColor(getResources().getColor(R.color.green_dam));
+					value3.setTextColor(getResources().getColor(R.color.red_color));
+					value4.setTextColor(getResources().getColor(R.color.green_dam));
+					value5.setTextColor(getResources().getColor(R.color.green_dam));
+				}else if(bmiValue > 30.0 && bmiValue <= 40.0){
+					value1.setTextColor(getResources().getColor(R.color.green_dam));
+					value2.setTextColor(getResources().getColor(R.color.green_dam));
+					value3.setTextColor(getResources().getColor(R.color.green_dam));
+					value4.setTextColor(getResources().getColor(R.color.red_color));
+					value5.setTextColor(getResources().getColor(R.color.green_dam));
+				}else if(bmiValue > 40.0){
+					value1.setTextColor(getResources().getColor(R.color.green_dam));
+					value2.setTextColor(getResources().getColor(R.color.green_dam));
+					value3.setTextColor(getResources().getColor(R.color.green_dam));
+					value4.setTextColor(getResources().getColor(R.color.green_dam));
+					value5.setTextColor(getResources().getColor(R.color.red_color));
+				}
+			}
+			int weightRecommend = (int)(maxWeight - weightValue);
+			if (bmiValue < 20.0 || bmiValue > 25.0) {
+				if (weightRecommend > 0) {
+					// up
+					txtRecommend.setText("YOU NEED TO UP WEIGHT AROUND " + String.valueOf(weightRecommend) + " KG");
+				}else{
+					// down
+					txtRecommend.setText("YOU NEED TO LOSE WEIGHT AROUND " + String.valueOf(weightRecommend) + " KG");
+				}
+			}else if (bmiValue > 20.0 && bmiValue <= 25.0){
+				txtRecommend.setText(" GOOD BODY! " );
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (weightValue < 1 || heightValue < 1) {
+				txtResult.setText(String.valueOf(0.0));
+			}
+			
+		}
 	}
 	
 }
