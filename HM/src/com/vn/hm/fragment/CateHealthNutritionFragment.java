@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class CateHealthNutritionFragment extends BaseFragment {
     private String TAG = "HealthNutritionFragment";
     private ListView listview;
     private List<CateTipsObject> listData;
+	private ProgressDialog pr;
 
     @Override
     public int getlayout() {
@@ -70,6 +72,7 @@ public class CateHealthNutritionFragment extends BaseFragment {
     }
 
     private void getAllCateTips() {
+    	pr = ProgressDialog.show(getActivity(), "Fitness & Gym", "loading...");
 	HashMap<String, String> params = new HashMap<String, String>();
 	D3Utils.execute(getActivity(), RequestMethod.GET,
 		D3Utils.API.API_LIST_CATE_TIPS, params,
@@ -105,6 +108,7 @@ public class CateHealthNutritionFragment extends BaseFragment {
 			    CateTipsAdapter adapter = new CateTipsAdapter(
 				    getActivity(), listData);
 			    listview.setAdapter(adapter);
+			    pr.dismiss();
 			} catch (JSONException e) {
 			    // TODO Auto-generated catch block
 			    e.printStackTrace();

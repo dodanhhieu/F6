@@ -8,6 +8,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class ExerciseCategory extends BaseFragment{
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	private ListView listview;
+	private ProgressDialog pr;
 	@Override
 	public int getlayout() {
 		// TODO Auto-generated method stub
@@ -75,9 +77,10 @@ public class ExerciseCategory extends BaseFragment{
 	}
 
 	private void getAllExerciseCategory(){
+		pr = ProgressDialog.show(getActivity(), "Fitness & Gym", "loading...");
 		HashMap<String, String> params = new HashMap<String, String>();
-
-		D3Utils.execute(getActivity(), RequestMethod.GET,D3Utils.API.API_LIST_ALL_CATE_EXERCISES, params, new ApiServiceCallback(){
+		String api = D3Utils.API.API_LIST_ALL_CATE_EXERCISES + "?sex=1";
+		D3Utils.execute(getActivity(), RequestMethod.GET,api, params, new ApiServiceCallback(){
 			
 			@Override
 			public void onError(String msgError) {
@@ -109,6 +112,7 @@ public class ExerciseCategory extends BaseFragment{
 					}
 					CateAdapter cateAdapter = new CateAdapter(getActivity(), listCate);
 					listview.setAdapter(cateAdapter);
+					pr.dismiss();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

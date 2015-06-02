@@ -1,7 +1,9 @@
 package com.vn.hm.fragment;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
@@ -23,11 +25,15 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -40,6 +46,8 @@ import com.d3.base.BaseFragment;
 import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
 import com.d3.base.GlobalFunction;
+import com.d3.base.db.BmiTable;
+import com.d3.base.db.Heart;
 import com.d3.base.db.UserAccount;
 import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
@@ -116,28 +124,12 @@ public class RegisterFragment extends BaseFragment {
 	
 	private void registerAccount() {
 
-//		HashMap<String, String> params = new HashMap<String, String>();
-//		params.put("email", etEmail.getText().toString());
-//		params.put("password", etPassword.getText().toString());
-//		params.put("weight", etWeight.getText().toString());
-//		params.put("height", etHeight.getText().toString());
-//		params.put("name", etName.getText().toString());
-//		UserAccount user = new UserAccount();
-//		String strName = etName.getText().toString(); 
-//		if (strName != null) {
-//			user.name = "Please regsiter name";
-//		}else{
-//			user.name = strName;
-//		}
-//		user.save();
 		int sexId = 0;
 		if (String.valueOf(spSex.getSelectedItem()).equalsIgnoreCase("Men")) {
 			sexId = 1;
 		}else{
 			sexId = 0;
 		}
-//		params.put("sex", String.valueOf(sexId));
-		//params.put("birthday", etBirthDay.getText().toString());
 		
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(D3Utils.API.BASESERVER + D3Utils.API.API_REGISTER);
@@ -205,7 +197,7 @@ public class RegisterFragment extends BaseFragment {
 						
 						//MenuFragment menu = new MenuFragment();
 						//menu.setUpStatusLogin(token,getActivity());
-						switchFragment(new ExerciseCategory());
+						openDialogRegisterSuccess();
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -257,6 +249,54 @@ public class RegisterFragment extends BaseFragment {
 			MainActivity fca = (MainActivity) getActivity();
 			fca.switchContent(fragment,"");
 		}
-
 	}
+	
+	AlertDialog alert;
+	 private  void openDialogRegisterSuccess() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			LayoutInflater inf = LayoutInflater.from(getActivity());
+			View view = inf.inflate(R.layout.dialog_register_success_layout, null);
+			builder.setView(view);
+			TextView txtName = (TextView)view.findViewById(R.id.dialog_user_name_id);
+			txtName.setText( etName.getText().toString());
+			bmiValue = calculateBmi();
+			TextView txtBMI = (TextView)view.findViewById(R.id.dialog_user_bmi_id);
+			txtBMI.setText(String.valueOf(bmiValue));
+			
+			Button btnOk = (Button)view.findViewById(R.id.dialog_btn_ok_id);
+			btnOk.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					switchFragment(new ExerciseCategory());
+					alert.dismiss();
+				}
+			});
+			alert = builder.create();
+			if (!alert.isShowing()) {
+				alert.show();
+			}else{
+				alert = null;
+			}
+		}
+	 
+	 
+	 float bmiValue;
+	 private float calculateBmi(){
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			float weightValue =  Float.valueOf(etWeight.getText().toString());
+			float heightValue =  Float.valueOf(etHeight.getText().toString());
+				
+				bmiValue = (float)(weightValue / (heightValue * heightValue));
+				bmiValue = bmiValue*10000;
+				bmiValue = Math.round(bmiValue);
+//				updateBmi(String.valueOf(bmiValue));
+				//log value bmi to db
+		    	final String currentDate = dateFormat.format(new Date());
+		    	BmiTable bmiTable = new BmiTable();
+		    	bmiTable.date = currentDate;
+		    	bmiTable.bmiIndex = bmiValue;
+		    	bmiTable.save();
+		    	return bmiValue;
+		}
 }

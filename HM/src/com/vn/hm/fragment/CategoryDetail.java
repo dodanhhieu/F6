@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -92,6 +93,7 @@ public class CategoryDetail extends BaseFragment {
         	//}
         }
 	};
+	private ProgressDialog pr;
 
 	public CategoryDetail(int cateId) {
 		this.idCate = cateId;
@@ -140,7 +142,7 @@ public class CategoryDetail extends BaseFragment {
 	}
 
 	private void getAllDataCate(int idCate) {
-
+		pr = ProgressDialog.show(getActivity(), "Fitness&Gym", "loading...");
 		HashMap<String, String> params = new HashMap<String, String>();
 		String API = D3Utils.API.API_LIST_EXERCISE_OF_CATE
 				+ String.valueOf(idCate) + ".json";
@@ -180,6 +182,7 @@ public class CategoryDetail extends BaseFragment {
 							
 							CateDetailAdapter adapter = new CateDetailAdapter(getActivity(), listData);
 							listview.setAdapter(adapter);
+							pr.dismiss();
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
