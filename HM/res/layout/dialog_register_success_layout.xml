@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#FFFFFF"
+    >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wellcome to Fitness and Gym app"
+        android:textColor="@color/green_dam"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dimen_5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_margin="@dimen/dimen_5dp"
+	    >
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Name: "
+	        android:textColor="@color/text_color"
+	        android:textSize="@dimen/dimen_15dp"
+	        />
+	    <TextView 
+	        android:id="@+id/dialog_user_name_id"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Minh "
+	        android:textColor="@color/text_color"
+	        android:textSize="@dimen/dimen_15dp"
+	        />
+	</LinearLayout>
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_margin="@dimen/dimen_5dp"
+	    >
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="BMI: "
+	        android:textColor="@color/text_color"
+	        android:textSize="@dimen/dimen_15dp"
+	        />
+	    <TextView 
+	        android:id="@+id/dialog_user_bmi_id"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Minh "
+	        android:textColor="@color/text_color"
+	        android:textSize="@dimen/dimen_15dp"
+	        />
+	</LinearLayout>
+	<Button 
+	    android:id="@+id/dialog_btn_ok_id"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text="OK"
+	    android:textSize="@dimen/dimen_18dp"
+	    android:gravity="center|center_horizontal"
+	    />
+</LinearLayout>
