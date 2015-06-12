@@ -3,7 +3,6 @@ package com.vn.hm.fragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -24,7 +23,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.media.audiofx.Visualizer.MeasurementPeakRms;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -38,12 +36,8 @@ import com.d3.base.D3Utils;
 import com.d3.base.DataSharePref;
 import com.d3.base.GlobalFunction;
 import com.d3.base.db.UserAccount;
-import com.vn.base.api.ApiServiceCallback;
 import com.vn.hm.MainActivity;
-import com.vn.hm.MenuFragment;
 import com.vn.hm.R;
-
-import d3.lib.base.callback.RestClient.RequestMethod;
 
 public class LoginFragment extends BaseFragment {
 	private EditText etEmail, etPassword;

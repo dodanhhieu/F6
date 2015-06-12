@@ -142,7 +142,7 @@ public class CategoryDetail extends BaseFragment {
 	}
 
 	private void getAllDataCate(int idCate) {
-		pr = ProgressDialog.show(getActivity(), "Fitness&Gym", "loading...");
+		pr = ProgressDialog.show(getActivity(), "Fitness & Gym", "loading...");
 		HashMap<String, String> params = new HashMap<String, String>();
 		String API = D3Utils.API.API_LIST_EXERCISE_OF_CATE
 				+ String.valueOf(idCate) + ".json";

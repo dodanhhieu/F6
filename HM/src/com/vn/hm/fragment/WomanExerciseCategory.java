@@ -77,7 +77,7 @@ public class WomanExerciseCategory extends BaseFragment{
 	}
 
 	private void getAllExerciseCategory(){
-		pr = ProgressDialog.show(getActivity(), "Fitness&Gym", "loading...");
+		pr = ProgressDialog.show(getActivity(), "Fitness & Gym", "loading...");
 		HashMap<String, String> params = new HashMap<String, String>();
 		String api = D3Utils.API.API_LIST_ALL_CATE_EXERCISES + "?sex=0";
 		D3Utils.execute(getActivity(), RequestMethod.GET,api, params, new ApiServiceCallback(){
